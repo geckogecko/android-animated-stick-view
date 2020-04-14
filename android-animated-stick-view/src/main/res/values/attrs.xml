@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StickView">
+        <attr name="horizontalLinesCount" format="integer" />
+        <attr name="verticalLinesCount" format="integer" />
+        <attr name="showGrid" format="boolean" />
+        <attr name="animationDuration" format="integer" />
+        <attr name="animationRepeat" format="boolean" />
+    </declare-styleable>
+</resources>

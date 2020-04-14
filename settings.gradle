@@ -1,0 +1,3 @@
+rootProject.name='AnimatedStickViewExample'
+include ':app'
+include ':android-animated-stick-view'
