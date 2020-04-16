@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         app:verticalLinesCount="5"
         app:horizontalLinesCount="5"
-        app:showGrid="true"
+        app:showGrid="false"
         app:animationRepeat="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

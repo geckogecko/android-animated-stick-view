@@ -6,5 +6,7 @@
         <attr name="showGrid" format="boolean" />
         <attr name="animationDuration" format="integer" />
         <attr name="animationRepeat" format="boolean" />
+        <attr name="dynamicHorizontalLinesCount" format="boolean" />
+        <attr name="dynamicVerticalLinesCount" format="boolean" />
     </declare-styleable>
 </resources>

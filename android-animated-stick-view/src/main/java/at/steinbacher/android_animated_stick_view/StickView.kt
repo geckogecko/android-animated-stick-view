@@ -12,6 +12,7 @@ import at.steinbacher.android_animated_stick_view.internal.GridDrawable
 import at.steinbacher.android_animated_stick_view.internal.SceneDrawable
 import at.steinbacher.android_animated_stick_view.internal.StickDrawable
 import at.steinbacher.android_animated_stick_view.internal.StickDrawableTypeEvaluator
+import kotlin.math.floor
 
 class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
     constructor(context: Context) : this(context, null)
@@ -37,6 +38,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     private var startAnimation = false
     private var animationRepeatMode = false
     private var showGrid = false
+    private var dynamicHorizontalLinesCount = false
+    private var dynamicVerticalLinesCount = false
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -111,10 +114,22 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     fun setGrid(horizontalLinesCount: Int, verticalLinesCount: Int) {
         this.horizontalLinesCount = horizontalLinesCount
         this.verticalLinesCount = verticalLinesCount
+    }
 
-        initDone = false
-        startAnimation = false
-        invalidate()
+    /**
+     * Sets the grid line count in horizontal direction
+     * @param horizontalLinesCount Number of grid lines in horizontal direction
+     */
+    fun setHorizontalLinesCount(horizontalLinesCount: Int) {
+        this.horizontalLinesCount = horizontalLinesCount
+    }
+
+    /**
+     * Sets the grid line count in horizontal direction
+     * @param verticalLinesCount Number of grid lines in horizontal direction
+     */
+    fun setVerticalLinesCount(verticalLinesCount: Int) {
+        this.verticalLinesCount = verticalLinesCount
     }
 
     /**
@@ -145,14 +160,30 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
      * Returns the currently set vertical grid lines count
      */
     fun getVerticalLinesCount(): Int {
-        return verticalLinesCount
+        return if(dynamicVerticalLinesCount) {
+            if(initDone) {
+                verticalLinesCount
+            } else {
+                -1
+            }
+        } else {
+            verticalLinesCount
+        }
     }
 
     /**
      * Returns the currently set horizontal grid lines count
      */
     fun getHorizontalLinesCount(): Int {
-        return horizontalLinesCount
+        return if(dynamicHorizontalLinesCount) {
+            if(initDone) {
+                horizontalLinesCount
+            } else {
+                -1
+            }
+        } else {
+            horizontalLinesCount
+        }
     }
 
     /**
@@ -172,6 +203,28 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         }
     }
 
+    /**
+     * Enable dynamic calculation of the horizontal lines count
+     * @param enabled True if the horizontal lines count should be calculated based on the cell width,
+     * False if not. Can't be enabled together with enableDynamicVerticalLinesCount()
+     */
+    fun enableDynamicHorizontalLinesCount(enabled: Boolean) {
+        if(!dynamicVerticalLinesCount) {
+            dynamicHorizontalLinesCount = enabled
+        }
+    }
+
+    /**
+     * Enable dynamic calculation of the vertical lines count
+     * @param enabled True if the vertical lines count should be calculated based on the cell height,
+     * False if not. Can't be enabled together with enableDynamicHorizontalLinesCount()
+     */
+    fun enableDynamicVerticalLinesCount(enabled: Boolean) {
+        if(!dynamicHorizontalLinesCount) {
+            dynamicVerticalLinesCount = enabled
+        }
+    }
+
     private fun applyAttributes(attrs: AttributeSet?) {
         if(attrs != null) {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.StickView)
@@ -185,7 +238,7 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             }
 
             if(typedArray.hasValue(R.styleable.StickView_showGrid)) {
-                showGrid = typedArray.getBoolean(R.styleable.StickView_verticalLinesCount, false)
+                showGrid = typedArray.getBoolean(R.styleable.StickView_showGrid, false)
             }
 
             if(typedArray.hasValue(R.styleable.StickView_animationDuration)) {
@@ -195,10 +248,29 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             if(typedArray.hasValue(R.styleable.StickView_animationRepeat)) {
                 animationRepeatMode = typedArray.getBoolean(R.styleable.StickView_animationRepeat,false)
             }
+
+            if(typedArray.hasValue(R.styleable.StickView_dynamicVerticalLinesCount)) {
+                dynamicVerticalLinesCount = typedArray.getBoolean(R.styleable.StickView_dynamicVerticalLinesCount,false)
+            }
+
+            if(typedArray.hasValue(R.styleable.StickView_horizontalLinesCount) && !dynamicVerticalLinesCount) {
+                dynamicHorizontalLinesCount = typedArray.getBoolean(R.styleable.StickView_horizontalLinesCount,false)
+            }
         }
     }
 
     private fun init() {
+        //dynamic horizontal or vertical?
+        if(dynamicHorizontalLinesCount) {
+            val cellWidth = width / verticalLinesCount
+            horizontalLinesCount = floor((height / cellWidth).toDouble()).toInt()
+        }
+
+        if(dynamicVerticalLinesCount) {
+            val cellHeight = height / horizontalLinesCount
+            verticalLinesCount = floor((width / cellHeight).toDouble()).toInt()
+        }
+
         //show grid?
         if(showGrid) {
             gridDrawable = GridDrawable(
