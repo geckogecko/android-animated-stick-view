@@ -3,64 +3,95 @@ package at.steinbacher.android_animated_stick_view.internal
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.PointF
+import at.steinbacher.android_animated_stick_view.Circle
+import at.steinbacher.android_animated_stick_view.Grid
+import at.steinbacher.android_animated_stick_view.Simple
 import at.steinbacher.android_animated_stick_view.Stick
 
 class SceneDrawable(context: Context,
                     horizontalLinesCount: Int,
                     verticalLinesCount: Int,
                     width: Float,
-                    height: Float) : StickViewDrawable(context,
-    horizontalLinesCount, verticalLinesCount, width, height) {
+                    height: Float,
+                    tag: String) : SimpleDrawable(context, horizontalLinesCount, verticalLinesCount,
+    width, height, tag) {
 
-    private val stickDrawables : MutableList<StickDrawable> = ArrayList()
+    private val simpleDrawables : MutableList<SimpleDrawable> = ArrayList()
 
-    fun addStick(stick : Stick) {
-        val translatedStartPoint = PointF(stick.startPointF.x * cellWidth,
-            stick.startPointF.y * cellHeight)
+    fun addSimpleDrawable(simple: Simple) {
+        when(simple) {
+            is Stick -> {
+                val translatedStartPoint = PointF(
+                    simple.startPointF.x * cellWidth,
+                    simple.startPointF.y * cellHeight
+                )
 
-        val translatedEndPoint = PointF(stick.endPointF.x * cellWidth,
-            stick.endPointF.y * cellHeight)
+                val translatedEndPoint = PointF(
+                    simple.endPointF.x * cellWidth,
+                    simple.endPointF.y * cellHeight
+                )
 
-        StickDrawable(context, stick, translatedStartPoint, translatedEndPoint).also {
-            stickDrawables.add(it)
+                StickDrawable(context, simple, translatedStartPoint, translatedEndPoint,
+                    verticalLinesCount, horizontalLinesCount, width, height, simple.tag
+                ).also {
+                    simpleDrawables.add(it)
+                }
+            }
+            is Grid -> {
+                GridDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, simple.tag).also {
+                    simpleDrawables.add(it)
+                }
+            }
+            is Circle -> {
+                val translatedMiddlePointF = PointF(
+                    simple.middlePointF.x * cellWidth,
+                    simple.middlePointF.y * cellHeight
+                )
+
+                val translatedRadius = simple.radius * cellWidth
+                CircleDrawable(context, simple, translatedMiddlePointF, translatedRadius,
+                    horizontalLinesCount, verticalLinesCount, width, height, simple.tag).also {
+                    simpleDrawables.add(it)
+                }
+            }
         }
     }
 
     override fun draw(canvas : Canvas) {
-        for(stickDrawable in stickDrawables) {
+        for(stickDrawable in simpleDrawables) {
             stickDrawable.draw(canvas)
         }
     }
 
-    fun contains(stickTag : String) : Boolean {
-        for(stickDrawable in stickDrawables) {
-            if(stickDrawable.tag == stickTag) return true
+    fun contains(tag : String) : Boolean {
+        for(simpleDrawable in simpleDrawables) {
+            if(simpleDrawable.tag == tag) return true
         }
 
         return false
     }
 
-    fun getStickDrawable(stickTag : String) : StickDrawable? {
-        for(stickDrawable in stickDrawables) {
-            if(stickDrawable.tag == stickTag) return stickDrawable
+    fun getSimpleDrawable(tag : String) : SimpleDrawable? {
+        for(simpleDrawable in simpleDrawables) {
+            if(simpleDrawable.tag == tag) return simpleDrawable
         }
 
         return null
     }
 
-    fun updateStickDrawable(updateStickDrawable: StickDrawable) {
-        for(i in 0 until stickDrawables.size) {
-            if(stickDrawables[i].tag == updateStickDrawable.tag) {
-                this.stickDrawables[i] = updateStickDrawable
+    fun updateSimpleDrawable(updateSimpleDrawable: SimpleDrawable) {
+        for(i in 0 until simpleDrawables.size) {
+            if(simpleDrawables[i].tag == updateSimpleDrawable.tag) {
+                this.simpleDrawables[i] = updateSimpleDrawable
             }
         }
     }
 
-    fun getStickDrawables() : List<StickDrawable> {
-        return stickDrawables
+    fun getSimpleDrawables() : MutableList<SimpleDrawable> {
+        return simpleDrawables
     }
 
-    fun clearSticks() {
-        stickDrawables.clear()
+    fun clearSimpleDrawables() {
+        simpleDrawables.clear()
     }
 }

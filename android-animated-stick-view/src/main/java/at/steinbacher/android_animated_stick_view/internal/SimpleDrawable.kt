@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.ColorFilter
 import android.graphics.drawable.Drawable
 
-abstract class StickViewDrawable(val context: Context,
-                                 val horizontalLinesCount: Int,
-                                 val verticalLinesCount: Int,
-                                 val width: Float,
-                                 val height: Float) : Drawable() {
+abstract class SimpleDrawable(val context: Context,
+                              val horizontalLinesCount: Int,
+                              val verticalLinesCount: Int,
+                              val width: Float,
+                              val height: Float,
+                              var tag: String) : Drawable() {
 
     protected val cellWidth: Float = width / verticalLinesCount
     protected val cellHeight: Float = height / horizontalLinesCount

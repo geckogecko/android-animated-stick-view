@@ -11,8 +11,9 @@ class GridDrawable(context: Context,
                    horizontalLinesCount: Int,
                    verticalLinesCount: Int,
                    width: Float,
-                   height: Float) : StickViewDrawable(context,
-    horizontalLinesCount, verticalLinesCount, width, height) {
+                   height: Float,
+                   tag: String) : SimpleDrawable(context, horizontalLinesCount, verticalLinesCount,
+    width, height, tag) {
 
     var gridPaint: Paint = Paint().apply { this.color = ContextCompat.getColor(context, R.color.black) }
 

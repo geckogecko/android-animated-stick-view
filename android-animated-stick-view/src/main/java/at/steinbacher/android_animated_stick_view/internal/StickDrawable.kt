@@ -5,21 +5,22 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PointF
-import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import at.steinbacher.android_animated_stick_view.R
+import at.steinbacher.android_animated_stick_view.Simple
 import at.steinbacher.android_animated_stick_view.Stick
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class StickDrawable(val context : Context,
+class StickDrawable(context : Context,
                     val sourceStick : Stick,
                     val translatedStartPoint : PointF,
-                    val translatedEndPoint: PointF) : Drawable() {
+                    val translatedEndPoint: PointF, horizontalLinesCount: Int,
+                    verticalLinesCount: Int, width: Float, height: Float, tag: String
+): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
-    var tag : String = sourceStick.tag
     var paint: Paint = Paint().apply { this.color = ContextCompat.getColor(context, R.color.black) }
 
     override fun draw(canvas: Canvas) {

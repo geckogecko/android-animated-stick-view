@@ -8,10 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
-import at.steinbacher.android_animated_stick_view.internal.GridDrawable
-import at.steinbacher.android_animated_stick_view.internal.SceneDrawable
-import at.steinbacher.android_animated_stick_view.internal.StickDrawable
-import at.steinbacher.android_animated_stick_view.internal.StickDrawableTypeEvaluator
+import at.steinbacher.android_animated_stick_view.internal.*
 import kotlin.math.floor
 
 class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
@@ -23,7 +20,6 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         applyAttributes(attrs)
     }
 
-    private var gridDrawable: GridDrawable? = null
     private lateinit var sceneDrawable: SceneDrawable
     private var currentSceneIndex = 0
 
@@ -37,7 +33,6 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     private var initDone = false
     private var startAnimation = false
     private var animationRepeatMode = false
-    private var showGrid = false
     private var dynamicHorizontalLinesCount = false
     private var dynamicVerticalLinesCount = false
 
@@ -49,13 +44,10 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         //init the view
         if (!initDone) init()
 
-        //draw grid if needed
-        gridDrawable?.draw(canvas)
-
-        //add sticks to the current scene if needed
-        for(stick in receivedScenes[currentSceneIndex].sticks) {
-            if(!sceneDrawable.contains(stick.tag)) {
-                sceneDrawable.addStick(stick)
+        //add simpleDrawables to the current scene if needed
+        for(simpleDrawable in receivedScenes[currentSceneIndex].simples) {
+            if(!sceneDrawable.contains(simpleDrawable.tag)) {
+                sceneDrawable.addSimpleDrawable(simpleDrawable)
             }
         }
 
@@ -85,24 +77,6 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
      */
     fun startAnimation() {
         startAnimation = true
-        invalidate()
-    }
-
-    /**
-     * Draw a grid on the view background. Useful for debugging the provided scenes
-     * @param show True if grid should be visible, False if not
-     */
-    fun showGrid(show: Boolean) {
-        showGrid = show
-
-        if(initDone) {
-            gridDrawable = if (show) {
-                GridDrawable(context, horizontalLinesCount, verticalLinesCount, width.toFloat(), height.toFloat())
-            } else {
-                null
-            }
-        }
-
         invalidate()
     }
 
@@ -195,7 +169,7 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             currentSceneIndex = index
 
             if(initDone) {
-                sceneDrawable.clearSticks()
+                sceneDrawable.clearSimpleDrawables()
                 invalidate()
             }
         } else {
@@ -237,10 +211,6 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
                 verticalLinesCount = typedArray.getInt(R.styleable.StickView_verticalLinesCount, -1)
             }
 
-            if(typedArray.hasValue(R.styleable.StickView_showGrid)) {
-                showGrid = typedArray.getBoolean(R.styleable.StickView_showGrid, false)
-            }
-
             if(typedArray.hasValue(R.styleable.StickView_animationDuration)) {
                 animationDuration = typedArray.getInt(R.styleable.StickView_animationDuration,-1).toLong()
             }
@@ -271,15 +241,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             verticalLinesCount = floor((width / cellHeight).toDouble()).toInt()
         }
 
-        //show grid?
-        if(showGrid) {
-            gridDrawable = GridDrawable(
-                context, horizontalLinesCount, verticalLinesCount, width.toFloat(), height.toFloat()
-            )
-        }
-
         sceneDrawable = SceneDrawable(context, horizontalLinesCount, verticalLinesCount,
-            width.toFloat(), height.toFloat())
+            width.toFloat(), height.toFloat(), "scene_drawable")
 
         initDone = true
     }
@@ -287,9 +250,9 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     private fun runAnimation() {
         val nextSceneDrawable = SceneDrawable(context,
             sceneDrawable.horizontalLinesCount, sceneDrawable.verticalLinesCount,
-            sceneDrawable.width, sceneDrawable.height).also { it ->
-                for(stick in receivedScenes[currentSceneIndex + 1].sticks) {
-                    it.addStick(stick)
+            sceneDrawable.width, sceneDrawable.height, "next_scene_drawable").also { it ->
+                for(simpleDrawable in receivedScenes[currentSceneIndex + 1].simples) {
+                    it.addSimpleDrawable(simpleDrawable)
                 }
         }
 
@@ -307,11 +270,11 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         if(animationRepeatMode) {
             currentSceneIndex++
             if (currentSceneIndex >= receivedScenes.size - 1) {
-                sceneDrawable.clearSticks()
+                sceneDrawable.clearSimpleDrawables()
                 currentSceneIndex = 0
-                for (stick in receivedScenes[currentSceneIndex].sticks) {
-                    if (!sceneDrawable.contains(stick.tag)) {
-                        sceneDrawable.addStick(stick)
+                for (simpleDrawable in receivedScenes[currentSceneIndex].simples) {
+                    if (!sceneDrawable.contains(simpleDrawable.tag)) {
+                        sceneDrawable.addSimpleDrawable(simpleDrawable)
                     }
                 }
             }
@@ -319,10 +282,10 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             val nextDrawnScene = SceneDrawable(
                 context,
                 sceneDrawable.horizontalLinesCount, sceneDrawable.verticalLinesCount,
-                sceneDrawable.width, sceneDrawable.height
+                sceneDrawable.width, sceneDrawable.height, "next_scene_drawable"
             ).also { it ->
-                for (stick in receivedScenes[currentSceneIndex + 1].sticks) {
-                    it.addStick(stick)
+                for (simpleDrawable in receivedScenes[currentSceneIndex + 1].simples) {
+                    it.addSimpleDrawable(simpleDrawable)
                 }
             }
 
@@ -343,9 +306,9 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
 
     override fun onAnimationUpdate(animation: ValueAnimator?) {
         if(animation != null) {
-            val animatedSticks = animation.animatedValue as Array<StickDrawable>
+            val animatedSticks = animation.animatedValue as Array<*>
             for(element in animatedSticks) {
-                sceneDrawable.updateStickDrawable(element)
+                sceneDrawable.updateSimpleDrawable(element as SimpleDrawable)
             }
 
             invalidate()
@@ -353,19 +316,19 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     }
 
     private fun createValueAnimator(sourceSceneDrawable: SceneDrawable, targetSceneDrawable: SceneDrawable): ValueAnimator {
-        val targetSceneSticks: List<StickDrawable> = targetSceneDrawable.getStickDrawables()
-        val currentDrawnSticks: Array<StickDrawable?> = arrayOfNulls<StickDrawable>(targetSceneSticks.size)
-        val targetSticks: Array<StickDrawable?> = arrayOfNulls<StickDrawable>(targetSceneSticks.size)
+        val targetSceneSDS: MutableList<SimpleDrawable> = targetSceneDrawable.getSimpleDrawables()
+        val currentDrawnSDS: Array<SimpleDrawable?> = arrayOfNulls<SimpleDrawable>(targetSceneSDS.size)
+        val targetSDS: Array<SimpleDrawable?> = arrayOfNulls<SimpleDrawable>(targetSceneSDS.size)
 
-        for (i in targetSceneSticks.indices) {
-            val stick: StickDrawable = targetSceneSticks[i]
-            if (sourceSceneDrawable.contains(stick.tag)) {
-                currentDrawnSticks[i] = sourceSceneDrawable.getStickDrawable(stick.tag)
-                targetSticks[i] = stick
+        for (i in targetSceneSDS.indices) {
+            val simpleDrawable: SimpleDrawable = targetSceneSDS[i]
+            if (sourceSceneDrawable.contains(simpleDrawable.tag)) {
+                currentDrawnSDS[i] = sourceSceneDrawable.getSimpleDrawable(simpleDrawable.tag)
+                targetSDS[i] = simpleDrawable
             }
         }
 
-        val valueAnimator = ValueAnimator.ofObject(StickDrawableTypeEvaluator(), currentDrawnSticks, targetSticks)
+        val valueAnimator = ValueAnimator.ofObject(SimpleDrawableTypeEvaluator(), currentDrawnSDS, targetSDS)
         valueAnimator.duration = animationDuration
         valueAnimator.interpolator = animationInterpolator
 
