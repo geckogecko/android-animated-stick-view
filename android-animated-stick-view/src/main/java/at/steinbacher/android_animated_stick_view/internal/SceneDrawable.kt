@@ -6,7 +6,7 @@ import android.graphics.PointF
 import at.steinbacher.android_animated_stick_view.Circle
 import at.steinbacher.android_animated_stick_view.Grid
 import at.steinbacher.android_animated_stick_view.Simple
-import at.steinbacher.android_animated_stick_view.Stick
+import at.steinbacher.android_animated_stick_view.Line
 
 class SceneDrawable(context: Context,
                     horizontalLinesCount: Int,
@@ -20,39 +20,14 @@ class SceneDrawable(context: Context,
 
     fun addSimpleDrawable(simple: Simple) {
         when(simple) {
-            is Stick -> {
-                val translatedStartPoint = PointF(
-                    simple.startPointF.x * cellWidth,
-                    simple.startPointF.y * cellHeight
-                )
-
-                val translatedEndPoint = PointF(
-                    simple.endPointF.x * cellWidth,
-                    simple.endPointF.y * cellHeight
-                )
-
-                StickDrawable(context, simple, translatedStartPoint, translatedEndPoint,
-                    verticalLinesCount, horizontalLinesCount, width, height, simple.tag
-                ).also {
-                    simpleDrawables.add(it)
-                }
+            is Line -> {
+                simpleDrawables.add(createLineDrawable(simple))
             }
             is Grid -> {
-                GridDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, simple.tag).also {
-                    simpleDrawables.add(it)
-                }
+                simpleDrawables.add(createGridDrawable(simple))
             }
             is Circle -> {
-                val translatedMiddlePointF = PointF(
-                    simple.middlePointF.x * cellWidth,
-                    simple.middlePointF.y * cellHeight
-                )
-
-                val translatedRadius = simple.radius * cellWidth
-                CircleDrawable(context, simple, translatedMiddlePointF, translatedRadius,
-                    horizontalLinesCount, verticalLinesCount, width, height, simple.tag).also {
-                    simpleDrawables.add(it)
-                }
+                simpleDrawables.add(createCircleDrawable(simple))
             }
         }
     }
@@ -94,4 +69,41 @@ class SceneDrawable(context: Context,
     fun clearSimpleDrawables() {
         simpleDrawables.clear()
     }
+
+    private fun createGridDrawable(grid: Grid) = GridDrawable(
+        context,
+        grid,
+        horizontalLinesCount,
+        verticalLinesCount,
+        width,
+        height,
+        grid.tag)
+
+    private fun createLineDrawable(line: Line) = LineDrawable(
+        context,
+        line,
+        translatePoint(line.startPoint),
+        translatePoint(line.endPoint),
+        verticalLinesCount,
+        horizontalLinesCount,
+        width,
+        height,
+        line.tag)
+
+    private fun createCircleDrawable(circle: Circle) =  CircleDrawable(
+        context,
+        circle,
+        translatePoint(circle.middlePointF),
+        translateFloat(circle.radius, cellWidth),
+        horizontalLinesCount,
+        verticalLinesCount,
+        width,
+        height,
+        circle.tag)
+
+    private fun translatePoint(point: PointF) = PointF(
+        translateFloat(point.x, cellWidth),
+        translateFloat(point.y, cellHeight))
+
+    private fun translateFloat(float: Float, translation: Float) = float * translation
 }

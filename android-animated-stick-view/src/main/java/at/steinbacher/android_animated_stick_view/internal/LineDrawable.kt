@@ -2,29 +2,25 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PointF
 import androidx.core.content.ContextCompat
 import at.steinbacher.android_animated_stick_view.R
-import at.steinbacher.android_animated_stick_view.Simple
-import at.steinbacher.android_animated_stick_view.Stick
+import at.steinbacher.android_animated_stick_view.Line
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class StickDrawable(context : Context,
-                    val sourceStick : Stick,
-                    val translatedStartPoint : PointF,
-                    val translatedEndPoint: PointF, horizontalLinesCount: Int,
-                    verticalLinesCount: Int, width: Float, height: Float, tag: String
+class LineDrawable(context : Context,
+                   val sourceLine : Line,
+                   val translatedStartPoint : PointF,
+                   val translatedEndPoint: PointF, horizontalLinesCount: Int,
+                   verticalLinesCount: Int, width: Float, height: Float, tag: String
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
-    var paint: Paint = Paint().apply { this.color = ContextCompat.getColor(context, R.color.black) }
-
     override fun draw(canvas: Canvas) {
-        var vectorDrawable = sourceStick.vectorDrawable
+        var vectorDrawable = sourceLine.vectorDrawable
         if(vectorDrawable != null) {
             val width = abs(translatedStartPoint.x - translatedEndPoint.x)
             val height = abs(translatedStartPoint.y - translatedEndPoint.y)
@@ -39,20 +35,10 @@ class StickDrawable(context : Context,
             vectorDrawable.draw(canvas)
             canvas.restore()
         } else {
-            canvas.drawLine(translatedStartPoint.x, translatedStartPoint.y, translatedEndPoint.x, translatedEndPoint.y, paint)
+            canvas.drawLine(translatedStartPoint.x, translatedStartPoint.y,
+                translatedEndPoint.x, translatedEndPoint.y,
+                sourceLine.paint)
         }
-    }
-
-    override fun setAlpha(alpha: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getOpacity(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setColorFilter(colorFilter: ColorFilter?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun getRotationDegrees(width : Float, height : Float, stickLength : Double) : Float {

@@ -1,4 +1,6 @@
 package at.steinbacher.android_animated_stick_view
 
-class Grid(tag: String) : Simple(tag){
+import android.graphics.Paint
+
+class Grid(paint: Paint, tag: String) : Simple(paint, tag){
 }

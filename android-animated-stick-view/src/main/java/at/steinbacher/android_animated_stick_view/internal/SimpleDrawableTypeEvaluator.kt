@@ -2,7 +2,6 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.animation.TypeEvaluator
 import android.graphics.PointF
-import android.util.Log
 
 class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
     override fun evaluate(
@@ -14,9 +13,9 @@ class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
 
         if(startValues != null && endValues != null) {
             for (i in startValues.indices) {
-                if(startValues[i] is StickDrawable && endValues[i] is StickDrawable) {
-                    val start: StickDrawable = startValues[i] as StickDrawable
-                    val end: StickDrawable = endValues[i] as StickDrawable
+                if(startValues[i] is LineDrawable && endValues[i] is LineDrawable) {
+                    val start: LineDrawable = startValues[i] as LineDrawable
+                    val end: LineDrawable = endValues[i] as LineDrawable
 
                     val interpolatedStartPoint = PointF(
                         start.translatedStartPoint.x + fraction
@@ -31,9 +30,9 @@ class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
                                 * (end.translatedEndPoint.y - start.translatedEndPoint.y))
 
                     array.add(
-                        StickDrawable(
+                        LineDrawable(
                             start.context,
-                            start.sourceStick,
+                            start.sourceLine,
                             interpolatedStartPoint,
                             interpolatedEndPoint,
                             start.horizontalLinesCount,

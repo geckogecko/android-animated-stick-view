@@ -1,5 +1,7 @@
 package at.steinbacher.android_animated_stick_view
 
-open class Simple(var tag: String) {
+import android.graphics.Paint
+
+open class Simple(val paint: Paint, val tag: String) {
     override fun toString(): String = "Tag: $tag"
 }
