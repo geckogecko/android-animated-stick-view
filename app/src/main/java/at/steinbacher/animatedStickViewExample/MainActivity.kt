@@ -5,6 +5,8 @@ import android.graphics.PointF
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import at.steinbacher.android_animated_stick_view.*
+import at.steinbacher.android_animated_stick_view.util.SceneUtil
+import java.nio.file.Files.move
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,20 +26,11 @@ class MainActivity : AppCompatActivity() {
             it.simples.add(Line(PointF(0F,1F), PointF(0F,0F), paint, "side_left"))
         }
 
-        val scene2 = Scene().also {
-            it.simples.add(Circle(PointF(5F,4F), 1F, paint, "circle"))
-            it.simples.add(Line(PointF(1F,1F), PointF(2F,1F), paint, "side_top"))
-            it.simples.add(Line(PointF(2F,1F), PointF(2F,2F), paint, "side_right"))
-            it.simples.add(Line(PointF(2F,2F), PointF(1F,2F), paint, "side_bottom"))
-            it.simples.add(Line(PointF(1F,2F), PointF(1F,1F), paint, "side_left"))
+        val scene2 = SceneUtil.move(scene.getCopy(), 1.0F, SceneUtil.TargetAxis.X).also {
+            (it.get("circle") as Circle).radius += 2
         }
-
-        val scene3 = Scene().also {
-            it.simples.add(Circle(PointF(4F,4F), 2F, paint, "circle"))
-            it.simples.add(Line(PointF(2F,1F), PointF(2F,2F), paint, "side_top"))
-            it.simples.add(Line(PointF(2F,2F), PointF(1F,2F), paint, "side_right"))
-            it.simples.add(Line(PointF(1F,2F), PointF(1F,1F), paint, "side_bottom"))
-            it.simples.add(Line(PointF(1F,1F), PointF(2F,1F), paint, "side_left"))
+        val scene3 = SceneUtil.move(scene2.getCopy(), 1.0F, SceneUtil.TargetAxis.Y).also {
+            (it.get("circle") as Circle).radius -= 3
         }
 
 

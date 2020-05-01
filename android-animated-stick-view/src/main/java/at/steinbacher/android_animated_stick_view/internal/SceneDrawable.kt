@@ -18,23 +18,20 @@ class SceneDrawable(context: Context,
 
     private val simpleDrawables : MutableList<SimpleDrawable> = ArrayList()
 
-    fun addSimpleDrawable(simple: Simple) {
-        when(simple) {
-            is Line -> {
-                simpleDrawables.add(createLineDrawable(simple))
-            }
-            is Grid -> {
-                simpleDrawables.add(createGridDrawable(simple))
-            }
-            is Circle -> {
-                simpleDrawables.add(createCircleDrawable(simple))
-            }
+    fun addSimpleDrawable(simple: Simple): Boolean {
+        val factory = getSimpleDrawableFactory()
+        val simpleDrawable = factory.createSimpleDrawable(simple)
+        return if(simpleDrawable != null) {
+            simpleDrawables.add(simpleDrawable)
+            true
+        } else {
+            false
         }
     }
 
     override fun draw(canvas : Canvas) {
-        for(stickDrawable in simpleDrawables) {
-            stickDrawable.draw(canvas)
+        for(simpleDrawables in simpleDrawables) {
+            simpleDrawables.draw(canvas)
         }
     }
 
@@ -70,40 +67,8 @@ class SceneDrawable(context: Context,
         simpleDrawables.clear()
     }
 
-    private fun createGridDrawable(grid: Grid) = GridDrawable(
-        context,
-        grid,
-        horizontalLinesCount,
-        verticalLinesCount,
-        width,
-        height,
-        grid.tag)
-
-    private fun createLineDrawable(line: Line) = LineDrawable(
-        context,
-        line,
-        translatePoint(line.startPoint),
-        translatePoint(line.endPoint),
-        verticalLinesCount,
-        horizontalLinesCount,
-        width,
-        height,
-        line.tag)
-
-    private fun createCircleDrawable(circle: Circle) =  CircleDrawable(
-        context,
-        circle,
-        translatePoint(circle.middlePointF),
-        translateFloat(circle.radius, cellWidth),
-        horizontalLinesCount,
-        verticalLinesCount,
-        width,
-        height,
-        circle.tag)
-
-    private fun translatePoint(point: PointF) = PointF(
-        translateFloat(point.x, cellWidth),
-        translateFloat(point.y, cellHeight))
-
-    private fun translateFloat(float: Float, translation: Float) = float * translation
+    fun getSimpleDrawableFactory() = SimpleDrawableFactory(context,
+        horizontalLinesCount, verticalLinesCount,
+        width, height,
+        cellWidth, cellHeight)
 }
