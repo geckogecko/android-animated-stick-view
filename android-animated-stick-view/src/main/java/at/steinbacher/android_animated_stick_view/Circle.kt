@@ -2,12 +2,30 @@ package at.steinbacher.android_animated_stick_view
 
 import android.graphics.Paint
 import android.graphics.PointF
+import org.json.JSONObject
 
-class Circle(var middlePointF: PointF, var radius: Float, paint: Paint, tag: String): Simple(paint, tag) {
+class Circle(var middlePoint: PointF, var radius: Float, paint: Paint, tag: String): Simple(paint, tag) {
 
-    override fun getCopy(): Simple {
-        return Circle(PointF(middlePointF.x, middlePointF.y), radius, paint, tag)
+    companion object {
+        fun fromJson(jsonObject: JSONObject): Circle {
+            return Circle(pointFromJson(jsonObject.getJSONObject("middlePoint")),
+                jsonObject.getDouble("radius").toFloat(),
+                Paint(),
+                jsonObject.getString("tag"))
+        }
     }
 
-    override fun toString(): String = "MiddlePointF: $middlePointF, Tag: $tag"
+    override fun getCopy(): Simple {
+        return Circle(PointF(middlePoint.x, middlePoint.y), radius, paint, tag)
+    }
+
+    override fun toJson() = JSONObject().also {
+        it.put("middlePoint", pointToJson(middlePoint))
+        it.put("radius", radius)
+        it.put("tag", tag)
+    }
+
+    override fun getSimpleName() = "Circle"
+
+    override fun toString(): String = "MiddlePointF: $middlePoint, Tag: $tag"
 }

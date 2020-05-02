@@ -54,7 +54,7 @@ class SimpleDrawableFactory(val context: Context,
     private fun createCircleDrawable(circle: Circle) =  CircleDrawable(
         context,
         circle,
-        translatePoint(circle.middlePointF),
+        translatePoint(circle.middlePoint),
         translateFloat(circle.radius, cellWidth),
         horizontalLinesCount,
         verticalLinesCount,

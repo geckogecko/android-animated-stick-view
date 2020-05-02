@@ -23,8 +23,8 @@ class SimpleUtil {
 
         fun moveCircle(circle: Circle, distance: Float, targetAxis: SceneUtil.TargetAxis): Circle {
             when (targetAxis) {
-                SceneUtil.TargetAxis.X -> circle.middlePointF.x += distance
-                SceneUtil.TargetAxis.Y -> circle.middlePointF.y += distance
+                SceneUtil.TargetAxis.X -> circle.middlePoint.x += distance
+                SceneUtil.TargetAxis.Y -> circle.middlePoint.y += distance
             }
 
             return circle

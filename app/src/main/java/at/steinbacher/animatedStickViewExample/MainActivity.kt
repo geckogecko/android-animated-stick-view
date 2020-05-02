@@ -3,6 +3,7 @@ package at.steinbacher.animatedStickViewExample
 import android.graphics.Paint
 import android.graphics.PointF
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import at.steinbacher.android_animated_stick_view.*
 import at.steinbacher.android_animated_stick_view.util.SceneUtil
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity() {
             it.simples.add(Rectangle(PointF(4F,4F), PointF(5F,5F), paint,"rectangle"))
             it.simples.add(Line(PointF(4F,4F), PointF(5F,5F), paint,"line"))
         }
+
+        val testScene = Scene.fromJson(scene.toJson())
+        Log.i("tag", testScene.toJson().toString())
 
         val scene2 = SceneUtil.move(scene.getCopy(), 2F, SceneUtil.TargetAxis.X)
 

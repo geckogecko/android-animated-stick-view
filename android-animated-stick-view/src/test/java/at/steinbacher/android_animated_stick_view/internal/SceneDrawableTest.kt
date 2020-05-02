@@ -2,11 +2,9 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import org.junit.Test
-import androidx.test.platform.app.InstrumentationRegistry
 import at.steinbacher.android_animated_stick_view.Circle
 import at.steinbacher.android_animated_stick_view.Grid
 import at.steinbacher.android_animated_stick_view.Line
@@ -15,14 +13,12 @@ import at.steinbacher.android_animated_stick_view.Simple
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.internal.util.reflection.FieldSetter
 import org.mockito.junit.MockitoJUnitRunner
-import org.robolectric.RobolectricTestRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class SceneDrawableTest {
