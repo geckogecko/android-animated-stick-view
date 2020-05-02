@@ -67,6 +67,35 @@ class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
                             start.tag
                         )
                     )
+                } else if(startValues[i] is RectangleDrawable && endValues[i] is RectangleDrawable) {
+                    val start: RectangleDrawable = startValues[i] as RectangleDrawable
+                    val end: RectangleDrawable = endValues[i] as RectangleDrawable
+
+                    val interpolatedLeftTop= PointF(
+                        start.translatedLeftTop.x + fraction
+                                * (end.translatedLeftTop.x - start.translatedLeftTop.x),
+                        start.translatedLeftTop.y + fraction
+                                * (end.translatedLeftTop.y - start.translatedLeftTop.y))
+
+                    val interpolatedRightBottom= PointF(
+                        start.translatedRightBottom.x + fraction
+                                * (end.translatedRightBottom.x - start.translatedRightBottom.x),
+                        start.translatedRightBottom.y + fraction
+                                * (end.translatedRightBottom.y - start.translatedRightBottom.y))
+
+                    array.add(
+                        RectangleDrawable(
+                            start.context,
+                            start.sourceRectangle,
+                            interpolatedLeftTop,
+                            interpolatedRightBottom,
+                            start.horizontalLinesCount,
+                            start.verticalLinesCount,
+                            start.width,
+                            start.height,
+                            start.tag
+                        )
+                    )
                 }
             }
         }

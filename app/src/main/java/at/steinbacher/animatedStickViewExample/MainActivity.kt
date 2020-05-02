@@ -19,25 +19,15 @@ class MainActivity : AppCompatActivity() {
         val paint = Paint(getColor(R.color.black))
 
         val scene = Scene().also {
-            it.simples.add(Circle(PointF(4F,4F), 2F, paint,"circle"))
-            it.simples.add(Line(PointF(0F,0F), PointF(1F,0F), paint, "side_top"))
-            it.simples.add(Line(PointF(1F,0F), PointF(1F,1F), paint, "side_right"))
-            it.simples.add(Line(PointF(1F,1F), PointF(0F,1F), paint, "side_bottom"))
-            it.simples.add(Line(PointF(0F,1F), PointF(0F,0F), paint, "side_left"))
+            it.simples.add(Rectangle(PointF(4F,4F), PointF(5F,5F), paint,"rectangle"))
+            it.simples.add(Line(PointF(4F,4F), PointF(5F,5F), paint,"line"))
         }
 
-        val scene2 = SceneUtil.move(scene.getCopy(), 1.0F, SceneUtil.TargetAxis.X).also {
-            (it.get("circle") as Circle).radius += 2
-        }
-        val scene3 = SceneUtil.move(scene2.getCopy(), 1.0F, SceneUtil.TargetAxis.Y).also {
-            (it.get("circle") as Circle).radius -= 3
-        }
-
+        val scene2 = SceneUtil.move(scene.getCopy(), 2F, SceneUtil.TargetAxis.X)
 
         val scenes = ArrayList<Scene>().also {
             it.add(scene)
             it.add(scene2)
-            it.add(scene3)
         }
 
         findViewById<StickView>(R.id.stick_view).let {

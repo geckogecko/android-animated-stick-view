@@ -2,6 +2,7 @@ package at.steinbacher.android_animated_stick_view.util
 
 import at.steinbacher.android_animated_stick_view.Circle
 import at.steinbacher.android_animated_stick_view.Line
+import at.steinbacher.android_animated_stick_view.Rectangle
 
 class SimpleUtil {
     companion object {
@@ -27,6 +28,21 @@ class SimpleUtil {
             }
 
             return circle
+        }
+
+        fun moveRectangle(rectangle: Rectangle, distance: Float, targetAxis: SceneUtil.TargetAxis): Rectangle {
+            when (targetAxis) {
+                SceneUtil.TargetAxis.X -> {
+                    rectangle.topLeft.x += distance
+                    rectangle.bottomRight.x += distance
+                }
+                SceneUtil.TargetAxis.Y -> {
+                    rectangle.topLeft.y += distance
+                    rectangle.bottomRight.y += distance
+                }
+            }
+
+            return rectangle
         }
     }
 }

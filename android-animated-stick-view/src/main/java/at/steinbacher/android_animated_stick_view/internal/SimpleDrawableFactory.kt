@@ -2,10 +2,7 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.PointF
-import at.steinbacher.android_animated_stick_view.Circle
-import at.steinbacher.android_animated_stick_view.Grid
-import at.steinbacher.android_animated_stick_view.Line
-import at.steinbacher.android_animated_stick_view.Simple
+import at.steinbacher.android_animated_stick_view.*
 
 class SimpleDrawableFactory(val context: Context,
                             val horizontalLinesCount: Int,
@@ -25,6 +22,9 @@ class SimpleDrawableFactory(val context: Context,
             }
             is Circle -> {
                 return createCircleDrawable(simple)
+            }
+            is Rectangle -> {
+                return createRectangleDrawable(simple)
             }
         }
 
@@ -61,6 +61,17 @@ class SimpleDrawableFactory(val context: Context,
         width,
         height,
         circle.tag)
+
+    private fun createRectangleDrawable(rectangle: Rectangle) =  RectangleDrawable(
+        context,
+        rectangle,
+        translatePoint(rectangle.topLeft),
+        translatePoint(rectangle.bottomRight),
+        horizontalLinesCount,
+        verticalLinesCount,
+        width,
+        height,
+        rectangle.tag)
 
     private fun translatePoint(point: PointF) = PointF(
         translateFloat(point.x, cellWidth),

@@ -1,9 +1,6 @@
 package at.steinbacher.android_animated_stick_view.util
 
-import at.steinbacher.android_animated_stick_view.Circle
-import at.steinbacher.android_animated_stick_view.Grid
-import at.steinbacher.android_animated_stick_view.Line
-import at.steinbacher.android_animated_stick_view.Scene
+import at.steinbacher.android_animated_stick_view.*
 
 class SceneUtil {
 
@@ -19,6 +16,9 @@ class SceneUtil {
                     }
                     is Circle -> {
                         scene.simples[i] = SimpleUtil.moveCircle(simple, distance, targetAxis)
+                    }
+                    is Rectangle -> {
+                        scene.simples[i] = SimpleUtil.moveRectangle(simple, distance, targetAxis)
                     }
                 }
             }
