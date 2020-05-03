@@ -7,7 +7,7 @@ class Grid(paint: Paint, tag: String) : Simple(paint, tag){
 
     companion object {
         fun fromJson(jsonObject: JSONObject): Grid {
-            return Grid(Paint(),
+            return Grid(paintFromJson(jsonObject.getJSONObject("paint")),
                 jsonObject.getString("tag"))
         }
     }
@@ -17,6 +17,7 @@ class Grid(paint: Paint, tag: String) : Simple(paint, tag){
     }
 
     override fun toJson()= JSONObject().also {
+        it.put("paint", paintToJson(paint))
         it.put("tag", tag)
     }
 

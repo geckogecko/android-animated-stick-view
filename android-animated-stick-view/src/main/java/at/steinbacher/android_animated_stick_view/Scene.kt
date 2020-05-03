@@ -1,5 +1,6 @@
 package at.steinbacher.android_animated_stick_view
 
+import android.content.Context
 import android.graphics.Paint
 import android.util.Log
 import org.json.JSONArray
@@ -9,7 +10,7 @@ class Scene {
     var simples: MutableList<Simple> = ArrayList()
 
     companion object {
-        fun fromJson(jsonArray: JSONArray): Scene {
+        fun fromJson(jsonArray: JSONArray, context: Context): Scene {
             return Scene().also {
                 for(i in 0 until jsonArray.length()) {
                     val jsonObject = jsonArray[i] as JSONObject
@@ -17,7 +18,7 @@ class Scene {
                         "Circle" -> it.simples.add(Circle.fromJson(jsonObject.getJSONObject("item")))
                         "Grid" -> it.simples.add(Grid.fromJson(jsonObject.getJSONObject("item")))
                         "Line" -> it.simples.add(Line.fromJson(jsonObject.getJSONObject("item")))
-                        "Rectangle" -> it.simples.add(Rectangle.fromJson(jsonObject.getJSONObject("item")))
+                        "Rectangle" -> it.simples.add(Rectangle.fromJson(jsonObject.getJSONObject("item"), context))
                     }
                 }
             }

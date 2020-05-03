@@ -12,7 +12,7 @@ class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: Stri
         fun fromJson(jsonObject: JSONObject): Line {
             return Line(pointFromJson(jsonObject.getJSONObject("startPoint")),
                 pointFromJson(jsonObject.getJSONObject("endPoint")),
-                Paint(),
+                paintFromJson(jsonObject.getJSONObject("paint")),
                 jsonObject.getString("tag"))
         }
     }
@@ -28,6 +28,7 @@ class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: Stri
     override fun toJson()= JSONObject().also {
         it.put("startPoint", pointToJson(startPoint))
         it.put("endPoint", pointToJson(endPoint))
+        it.put("paint", paintToJson(paint))
         it.put("tag", tag)
     }
 

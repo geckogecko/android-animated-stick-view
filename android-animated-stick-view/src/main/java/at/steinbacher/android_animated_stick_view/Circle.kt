@@ -10,7 +10,7 @@ class Circle(var middlePoint: PointF, var radius: Float, paint: Paint, tag: Stri
         fun fromJson(jsonObject: JSONObject): Circle {
             return Circle(pointFromJson(jsonObject.getJSONObject("middlePoint")),
                 jsonObject.getDouble("radius").toFloat(),
-                Paint(),
+                paintFromJson(jsonObject.getJSONObject("paint")),
                 jsonObject.getString("tag"))
         }
     }
@@ -22,6 +22,7 @@ class Circle(var middlePoint: PointF, var radius: Float, paint: Paint, tag: Stri
     override fun toJson() = JSONObject().also {
         it.put("middlePoint", pointToJson(middlePoint))
         it.put("radius", radius)
+        it.put("paint", paintToJson(paint))
         it.put("tag", tag)
     }
 

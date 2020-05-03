@@ -72,6 +72,16 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     }
 
     /**
+     * @param sceneCollection to loop through
+     * Initially the first scene is shown. After startAnimation() is called StickView starts looping
+     * through the provided scenes.
+     * @see #startAnimation()
+     */
+    fun setSceneCollection(sceneCollection: SceneCollection) {
+        receivedScenes = sceneCollection.scenes
+    }
+
+    /**
      * Start looping through the provided scenes
      * @see #setScenes(scenes : List<Scene>)
      */

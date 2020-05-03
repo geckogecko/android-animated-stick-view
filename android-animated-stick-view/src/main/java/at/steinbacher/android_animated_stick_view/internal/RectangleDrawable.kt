@@ -15,8 +15,17 @@ class RectangleDrawable(context : Context,
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
     override fun draw(canvas: Canvas) {
-        canvas.drawRect(translatedLeftTop.x, translatedLeftTop.y,
-            translatedRightBottom.x, translatedRightBottom.y,
-            sourceRectangle.paint)
+        val vectorDrawable = sourceRectangle.getVectorDrawable()
+        if(vectorDrawable != null) {
+            vectorDrawable.setBounds(translatedLeftTop.x.toInt(), translatedLeftTop.y.toInt(),
+                translatedRightBottom.x.toInt(), translatedRightBottom.y.toInt())
+            vectorDrawable.draw(canvas)
+        } else {
+            canvas.drawRect(
+                translatedLeftTop.x, translatedLeftTop.y,
+                translatedRightBottom.x, translatedRightBottom.y,
+                sourceRectangle.paint
+            )
+        }
     }
 }
