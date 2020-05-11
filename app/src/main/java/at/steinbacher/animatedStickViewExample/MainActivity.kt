@@ -19,29 +19,25 @@ class MainActivity : AppCompatActivity() {
         //it.vectorDrawable = resources.getDrawable(R.drawable.ic_trending_flat_24px) as VectorDrawable?
 
         val paint = Paint().also {
-            it.color = getColor(R.color.red)
+            it.color = getColor(R.color.black)
+            it.strokeWidth = 5f
         }
 
         val scene = Scene().also {
-            it.simples.add(Rectangle(PointF(4F,4F), PointF(5F,5F), paint,"rectangle"))
-            it.simples.add(Rectangle(PointF(4F,4F), PointF(5F,5F), paint,"rectangle2").also { rect ->
-                rect.setVectorDrawable(R.drawable.ic_trending_flat_24px, applicationContext)
-            })
+            it.simples.add(Line(PointF(4F,5F), PointF(6F,5F), paint,"line"))
         }
 
-        val scene2 = SceneUtil.move(scene.getCopy(), 2F, SceneUtil.TargetAxis.X)
+        val scene2 = SceneUtil.move(scene.getCopy(), -2F, SceneUtil.TargetAxis.Y)
 
         val sceneCollection = SceneCollection().also {
             it.scenes.add(scene)
             it.scenes.add(scene2)
         }
 
-        val testSceneCollection = SceneCollection.fromJson(sceneCollection.toJson(), applicationContext)
-
         findViewById<StickView>(R.id.stick_view).let {
-            it.setGrid(10, 10)
+            it.setVerticalLinesCount(10)
             it.enableDynamicHorizontalLinesCount(true)
-            it.setSceneCollection(testSceneCollection)
+            it.setSceneCollection(sceneCollection)
             it.startAnimation()
         }
     }

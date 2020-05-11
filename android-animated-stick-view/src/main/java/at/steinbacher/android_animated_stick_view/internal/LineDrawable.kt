@@ -20,7 +20,7 @@ class LineDrawable(context : Context,
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
     override fun draw(canvas: Canvas) {
-        val vectorDrawable = sourceLine.vectorDrawable
+        val vectorDrawable = sourceLine.getVectorDrawable()
         if(vectorDrawable != null) {
             val width = abs(translatedStartPoint.x - translatedEndPoint.x)
             val height = abs(translatedStartPoint.y - translatedEndPoint.y)

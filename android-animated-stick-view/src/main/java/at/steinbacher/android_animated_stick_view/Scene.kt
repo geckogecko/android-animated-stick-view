@@ -17,7 +17,7 @@ class Scene {
                     when(jsonObject.getString("item_type")) {
                         "Circle" -> it.simples.add(Circle.fromJson(jsonObject.getJSONObject("item")))
                         "Grid" -> it.simples.add(Grid.fromJson(jsonObject.getJSONObject("item")))
-                        "Line" -> it.simples.add(Line.fromJson(jsonObject.getJSONObject("item")))
+                        "Line" -> it.simples.add(Line.fromJson(jsonObject.getJSONObject("item"), context))
                         "Rectangle" -> it.simples.add(Rectangle.fromJson(jsonObject.getJSONObject("item"), context))
                     }
                 }
