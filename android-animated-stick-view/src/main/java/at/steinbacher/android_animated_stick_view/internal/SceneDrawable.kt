@@ -107,11 +107,11 @@ class SceneDrawable(context: Context,
             }
         }
 
-        return if(currentClicked != null && currentMinDistance < 20) {
+        return if(currentClicked != null && currentMinDistance < 50) {
             Log.i(TAG, "${currentClicked!!.tag} got clicked!")
             currentClicked
         } else {
-            Log.i(TAG, "nothing got clicked!")
+            Log.i(TAG, "nothing got clicked! $currentMinDistance")
             null
         }
     }
