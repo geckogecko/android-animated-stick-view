@@ -2,11 +2,10 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.PointF
-import androidx.core.content.ContextCompat
-import at.steinbacher.android_animated_stick_view.R
+import android.util.Log
 import at.steinbacher.android_animated_stick_view.Line
+import at.steinbacher.android_animated_stick_view.util.MathUtil
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.pow
@@ -14,10 +13,39 @@ import kotlin.math.sqrt
 
 class LineDrawable(context : Context,
                    val sourceLine : Line,
-                   val translatedStartPoint : PointF,
-                   val translatedEndPoint: PointF, horizontalLinesCount: Int,
+                   var translatedStartPoint : PointF,
+                   var translatedEndPoint: PointF, horizontalLinesCount: Int,
                    verticalLinesCount: Int, width: Float, height: Float, tag: String
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
+
+    private val lineLength = MathUtil.distanceBetweenPoints(translatedStartPoint.x, translatedStartPoint.y,
+        translatedEndPoint.x, translatedEndPoint.y)
+
+    override fun distanceTo(x: Float, y: Float): Float {
+        val distanceToLine = pDistance(x,y, translatedStartPoint.x, translatedStartPoint.y, translatedEndPoint.x, translatedEndPoint.y)
+        val distanceToStart = MathUtil.distanceBetweenPoints(x, y, translatedStartPoint.x, translatedStartPoint.y)
+        val distanceToEnd = MathUtil.distanceBetweenPoints(x, y, translatedEndPoint.x, translatedEndPoint.y)
+
+        if(distanceToStart > lineLength || distanceToEnd > lineLength) {
+            return Float.MAX_VALUE
+        }
+
+        Log.i("TAGTEST", "$tag $distanceToStart $distanceToEnd")
+        return distanceToLine
+    }
+
+    override fun moveTo(x: Float, y: Float) {
+        val middlePoint = PointF((translatedStartPoint.x + translatedEndPoint.x) / 2,
+            (translatedStartPoint.y + translatedEndPoint.y) / 2)
+        val xOffset = x-middlePoint.x
+        val yOffset = y-middlePoint.y
+
+        translatedStartPoint.x += xOffset
+        translatedStartPoint.y += yOffset
+
+        translatedEndPoint.x += xOffset
+        translatedEndPoint.y += yOffset
+    }
 
     override fun draw(canvas: Canvas) {
         val vectorDrawable = sourceLine.getVectorDrawable()
@@ -34,6 +62,7 @@ class LineDrawable(context : Context,
             canvas.rotate(alpha, translatedStartPoint.x, translatedStartPoint.y)
             vectorDrawable.draw(canvas)
             canvas.restore()
+
         } else {
             canvas.drawLine(translatedStartPoint.x, translatedStartPoint.y,
                 translatedEndPoint.x, translatedEndPoint.y,
@@ -65,5 +94,24 @@ class LineDrawable(context : Context,
         }
 
         return alpha
+    }
+
+    //from: https://stackoverflow.com/a/30567488/5183341
+    private fun pDistance(
+        x: Float,
+        y: Float,
+        x1: Float,
+        y1: Float,
+        x2: Float,
+        y2: Float
+    ): Float {
+        val A = x - x1 // position of point rel one end of line
+        val B = y - y1
+        val C = x2 - x1 // vector along line
+        val D = y2 - y1
+        val E = -D // orthogonal vector
+        val dot = A * E + B * C
+        val len_sq = E * E + C * C
+        return (abs(dot) / sqrt(len_sq.toDouble())).toFloat()
     }
 }

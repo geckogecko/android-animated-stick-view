@@ -2,11 +2,10 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.PointF
-import at.steinbacher.android_animated_stick_view.Circle
-import at.steinbacher.android_animated_stick_view.Grid
-import at.steinbacher.android_animated_stick_view.Simple
-import at.steinbacher.android_animated_stick_view.Line
+import android.util.Log
+import at.steinbacher.android_animated_stick_view.*
+
+private const val TAG = "SceneDrawable"
 
 class SceneDrawable(context: Context,
                     horizontalLinesCount: Int,
@@ -27,6 +26,26 @@ class SceneDrawable(context: Context,
         } else {
             false
         }
+    }
+
+    fun getCurrentScene(): Scene {
+        val factory = getSimpleFactory()
+
+        val scene = Scene()
+        simpleDrawables.forEach {
+            factory.createSimple(it)?.let { simple ->
+                scene.simples.add(simple)
+            }
+        }
+
+        return scene
+    }
+
+    override fun distanceTo(x: Float, y: Float): Float {
+        return Float.MAX_VALUE
+    }
+
+    override fun moveTo(x: Float, y: Float) {
     }
 
     override fun draw(canvas : Canvas) {
@@ -71,4 +90,33 @@ class SceneDrawable(context: Context,
         horizontalLinesCount, verticalLinesCount,
         width, height,
         cellWidth, cellHeight)
+
+    fun getSimpleFactory() = SimpleFactory(context,
+        horizontalLinesCount, verticalLinesCount,
+        width, height,
+        cellWidth, cellHeight)
+
+    fun getClickedDrawable(x: Float, y: Float): SimpleDrawable? {
+        var currentMinDistance: Float = Float.MAX_VALUE
+        var currentClicked: SimpleDrawable? = null
+        simpleDrawables.forEach {
+            val distance = it.distanceTo(x, y)
+            if(distance < currentMinDistance) {
+                currentMinDistance = distance
+                currentClicked = it
+            }
+        }
+
+        return if(currentClicked != null && currentMinDistance < 20) {
+            Log.i(TAG, "${currentClicked!!.tag} got clicked!")
+            currentClicked
+        } else {
+            Log.i(TAG, "nothing got clicked!")
+            null
+        }
+    }
+
+    fun moveDrawable(simpleDrawable: SimpleDrawable, newX: Float, newY: Float) {
+        simpleDrawable.moveTo(newX, newY)
+    }
 }

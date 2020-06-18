@@ -14,6 +14,14 @@ class RectangleDrawable(context : Context,
                         width: Float, height: Float, tag: String
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
+    override fun distanceTo(x: Float, y: Float): Float {
+        return Float.MAX_VALUE
+    }
+
+    override fun moveTo(x: Float, y: Float) {
+        TODO("Not yet implemented")
+    }
+
     override fun draw(canvas: Canvas) {
         val vectorDrawable = sourceRectangle.getVectorDrawable()
         if(vectorDrawable != null) {

@@ -14,6 +14,9 @@ abstract class SimpleDrawable(val context: Context,
     protected val cellWidth: Float = width / verticalLinesCount
     protected val cellHeight: Float = height / horizontalLinesCount
 
+    abstract fun distanceTo(x: Float, y: Float): Float
+    abstract fun moveTo(x: Float, y: Float)
+
     override fun setAlpha(alpha: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

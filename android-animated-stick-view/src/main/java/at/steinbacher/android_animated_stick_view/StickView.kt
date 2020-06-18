@@ -5,13 +5,15 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
 import at.steinbacher.android_animated_stick_view.internal.*
 import kotlin.math.floor
 
-class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
+class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener, View.OnTouchListener {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
         applyAttributes(attrs)
@@ -35,6 +37,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     private var animationRepeatMode = false
     private var dynamicHorizontalLinesCount = false
     private var dynamicVerticalLinesCount = false
+
+    private var currentlyDraggedDrawable: SimpleDrawable? = null
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -209,6 +213,10 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         }
     }
 
+    fun getCurrentScene(): Scene {
+        return sceneDrawable.getCurrentScene()
+    }
+
     private fun applyAttributes(attrs: AttributeSet?) {
         if(attrs != null) {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.StickView)
@@ -255,6 +263,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             width.toFloat(), height.toFloat(), "scene_drawable")
 
         initDone = true
+
+        setOnTouchListener(this)
     }
 
     private fun runAnimation() {
@@ -343,5 +353,19 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         valueAnimator.interpolator = animationInterpolator
 
         return valueAnimator
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        if (event != null) {
+            when(event.action) {
+                MotionEvent.ACTION_DOWN -> currentlyDraggedDrawable = sceneDrawable.getClickedDrawable(event.x, event.y)
+                MotionEvent.ACTION_MOVE -> currentlyDraggedDrawable?.let {
+                    sceneDrawable.moveDrawable(it, event.x, event.y)
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> currentlyDraggedDrawable = null
+            }
+        }
+        return true
     }
 }

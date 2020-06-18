@@ -17,6 +17,14 @@ class GridDrawable(context: Context,
                    tag: String) : SimpleDrawable(context, horizontalLinesCount, verticalLinesCount,
     width, height, tag) {
 
+    //we dont want click events for the grid
+    override fun distanceTo(x: Float, y: Float): Float {
+        return Float.MAX_VALUE
+    }
+
+    //we dont want to allow moving the grid
+    override fun moveTo(x: Float, y: Float) {}
+
     override fun draw(canvas: Canvas) {
         for (i in 0..horizontalLinesCount) {
             val targetY = i*cellHeight
