@@ -18,7 +18,7 @@ class RectangleDrawable(context : Context,
         return Float.MAX_VALUE
     }
 
-    override fun moveTo(x: Float, y: Float) {
+    override fun move(x: Float, y: Float) {
         TODO("Not yet implemented")
     }
 

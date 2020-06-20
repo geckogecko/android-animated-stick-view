@@ -10,16 +10,25 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
+import android.widget.LinearLayout
 import at.steinbacher.android_animated_stick_view.internal.*
+import kotlinx.android.synthetic.main.layout_stick_view.view.*
 import kotlin.math.floor
 
-class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener, View.OnTouchListener {
-    constructor(context: Context) : this(context, null)
+class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener, View.OnTouchListener {
+    constructor(context: Context) : this(context, null) {
+        setWillNotDraw(false)
+        inflate()
+    }
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
+        setWillNotDraw(false)
         applyAttributes(attrs)
+        inflate()
     }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        setWillNotDraw(false)
         applyAttributes(attrs)
+        inflate()
     }
 
     private lateinit var sceneDrawable: SceneDrawable
@@ -40,9 +49,10 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
 
     private var currentlyDraggedDrawable: SimpleDrawable? = null
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
+    private var lastMotionX: Float? = null
+    private var lastMotionY: Float? = null
 
+    override fun onDraw(canvas: Canvas?) {
         if(canvas == null) return
 
         //init the view
@@ -63,6 +73,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             runAnimation()
             startAnimation = false
         }
+
+        super.onDraw(canvas)
     }
 
     /**
@@ -213,8 +225,25 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
         }
     }
 
+    /**
+     * TODO
+     */
     fun getCurrentScene(): Scene {
         return sceneDrawable.getCurrentScene()
+    }
+
+    private fun inflate() {
+        View.inflate(context, R.layout.layout_stick_view, this)
+
+        button_edit_save.setOnClickListener {
+            currentlyDraggedDrawable?.let {
+                sceneDrawable.highlightDrawable(it, false)
+                currentlyDraggedDrawable = null
+                invalidate()
+
+                nav_edit.visibility = View.GONE
+            }
+        }
     }
 
     private fun applyAttributes(attrs: AttributeSet?) {
@@ -244,6 +273,8 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
             if(typedArray.hasValue(R.styleable.StickView_horizontalLinesCount) && !dynamicVerticalLinesCount) {
                 dynamicHorizontalLinesCount = typedArray.getBoolean(R.styleable.StickView_horizontalLinesCount,false)
             }
+
+            typedArray.recycle()
         }
     }
 
@@ -358,12 +389,30 @@ class StickView : View, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorL
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event != null) {
             when(event.action) {
-                MotionEvent.ACTION_DOWN -> currentlyDraggedDrawable = sceneDrawable.getClickedDrawable(event.x, event.y)
-                MotionEvent.ACTION_MOVE -> currentlyDraggedDrawable?.let {
-                    sceneDrawable.moveDrawable(it, event.x, event.y)
-                    invalidate()
+                MotionEvent.ACTION_DOWN -> {
+                    if(currentlyDraggedDrawable == null) {
+                        currentlyDraggedDrawable = sceneDrawable.getClickedDrawable(event.x, event.y)
+                        currentlyDraggedDrawable?.let {
+                            nav_edit.visibility = View.VISIBLE
+                            sceneDrawable.highlightDrawable(it, true)
+                            invalidate()
+                        }
+                    }
                 }
-                MotionEvent.ACTION_UP -> currentlyDraggedDrawable = null
+                MotionEvent.ACTION_MOVE -> currentlyDraggedDrawable?.let {
+                    if(lastMotionX != null && lastMotionY != null) {
+                        sceneDrawable.moveDrawable(it, lastMotionX!!-event.x, lastMotionY!!-event.y)
+                        invalidate()
+                    }
+
+                    lastMotionX = event.x
+                    lastMotionY = event.y
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    lastMotionX = null
+                    lastMotionY = null
+                }
             }
         }
         return true

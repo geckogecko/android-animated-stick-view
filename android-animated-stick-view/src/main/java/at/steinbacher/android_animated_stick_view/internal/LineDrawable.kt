@@ -34,17 +34,12 @@ class LineDrawable(context : Context,
         return distanceToLine
     }
 
-    override fun moveTo(x: Float, y: Float) {
-        val middlePoint = PointF((translatedStartPoint.x + translatedEndPoint.x) / 2,
-            (translatedStartPoint.y + translatedEndPoint.y) / 2)
-        val xOffset = x-middlePoint.x
-        val yOffset = y-middlePoint.y
+    override fun move(moveX: Float, moveY: Float) {
+        translatedStartPoint.x -= moveX
+        translatedStartPoint.y -= moveY
 
-        translatedStartPoint.x += xOffset
-        translatedStartPoint.y += yOffset
-
-        translatedEndPoint.x += xOffset
-        translatedEndPoint.y += yOffset
+        translatedEndPoint.x -= moveX
+        translatedEndPoint.y -= moveY
     }
 
     override fun draw(canvas: Canvas) {
@@ -67,6 +62,15 @@ class LineDrawable(context : Context,
             canvas.drawLine(translatedStartPoint.x, translatedStartPoint.y,
                 translatedEndPoint.x, translatedEndPoint.y,
                 sourceLine.paint)
+        }
+
+        if(highlighted) {
+            val distance = 10
+            val left = translatedStartPoint.x  - distance
+            val top = translatedStartPoint.y - distance
+            val right = translatedEndPoint.x + distance
+            val bottom = translatedEndPoint.y + distance
+            canvas.drawRect(left, top, right, bottom, highlightPaint)
         }
     }
 

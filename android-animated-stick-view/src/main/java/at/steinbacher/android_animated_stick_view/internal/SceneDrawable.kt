@@ -45,7 +45,7 @@ class SceneDrawable(context: Context,
         return Float.MAX_VALUE
     }
 
-    override fun moveTo(x: Float, y: Float) {
+    override fun move(x: Float, y: Float) {
     }
 
     override fun draw(canvas : Canvas) {
@@ -116,7 +116,11 @@ class SceneDrawable(context: Context,
         }
     }
 
-    fun moveDrawable(simpleDrawable: SimpleDrawable, newX: Float, newY: Float) {
-        simpleDrawable.moveTo(newX, newY)
+    fun highlightDrawable(simpleDrawable: SimpleDrawable, highlighted: Boolean) {
+        simpleDrawable.highlighted = highlighted
+    }
+
+    fun moveDrawable(simpleDrawable: SimpleDrawable, moveX: Float, moveY: Float) {
+        simpleDrawable.move(moveX, moveY)
     }
 }

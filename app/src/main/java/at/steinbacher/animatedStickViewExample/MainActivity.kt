@@ -29,14 +29,14 @@ class MainActivity : AppCompatActivity() {
 
         //it.vectorDrawable = resources.getDrawable(R.drawable.ic_trending_flat_24px) as VectorDrawable?
 
-        val paint = Paint().also {
-            it.color = getColor(R.color.black)
-            it.strokeWidth = 5f
+        val paint = Paint().apply {
+            color = getColor(R.color.black)
+            strokeWidth = 5f
         }
 
-        val gridPaint = Paint().also {
-            it.color = getColor(R.color.grey)
-            it.strokeWidth = 1f
+        val gridPaint = Paint().apply {
+            color = getColor(R.color.grey)
+            strokeWidth = 1f
         }
 
         val scene = Scene().also {
@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        val sceneCollection = SceneCollection().also {
-            it.scenes.add(scene)
+        val sceneCollection = SceneCollection().apply {
+            scenes.add(scene)
         }
 
         stickView?.let {
