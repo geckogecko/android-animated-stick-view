@@ -6,7 +6,12 @@ import android.graphics.PointF
 import android.graphics.drawable.VectorDrawable
 import org.json.JSONObject
 
-class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: String): Simple(paint, tag) {
+class Line(var startPoint: PointF,
+           var endPoint: PointF,
+           var width: Float,
+           paint: Paint,
+           tag: String
+): Simple(paint, tag) {
     private var vectorDrawableInt: Int = -1
     private var vectorDrawable: VectorDrawable? = null
 
@@ -14,6 +19,7 @@ class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: Stri
         fun fromJson(jsonObject: JSONObject, context: Context): Line {
             val line = Line(pointFromJson(jsonObject.getJSONObject("startPoint")),
                 pointFromJson(jsonObject.getJSONObject("endPoint")),
+                jsonObject.getDouble("width").toFloat(),
                 paintFromJson(jsonObject.getJSONObject("paint")),
                 jsonObject.getString("tag"))
 
@@ -29,6 +35,7 @@ class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: Stri
         return Line(
             PointF(startPoint.x, startPoint.y),
             PointF(endPoint.x, endPoint.y),
+            width,
             paint,
             tag)
     }
@@ -36,6 +43,7 @@ class Line(var startPoint: PointF, var endPoint: PointF, paint: Paint, tag: Stri
     override fun toJson()= JSONObject().also {
         it.put("startPoint", pointToJson(startPoint))
         it.put("endPoint", pointToJson(endPoint))
+        it.put("width", width)
         it.put("paint", paintToJson(paint))
 
         if(vectorDrawableInt != -1) {

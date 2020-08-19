@@ -12,7 +12,9 @@ private const val TAG = "LineDrawable"
 class LineDrawable(context : Context,
                    val sourceLine : Line,
                    var translatedStartPoint : PointF,
-                   var translatedEndPoint: PointF, horizontalLinesCount: Int,
+                   var translatedEndPoint: PointF,
+                   var translatedWidth: Float,
+                   horizontalLinesCount: Int,
                    verticalLinesCount: Int, width: Float, height: Float, tag: String
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
@@ -53,8 +55,8 @@ class LineDrawable(context : Context,
             val stickLength = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0))
             val alpha = getRotationDegrees(width, height, stickLength)
 
-            vectorDrawable.setBounds(translatedStartPoint.x.toInt(), (translatedStartPoint.y - 30).toInt(),
-                (translatedStartPoint.x + stickLength).toInt(), (translatedStartPoint.y + 30).toInt())
+            vectorDrawable.setBounds(translatedStartPoint.x.toInt(), (translatedStartPoint.y - translatedWidth/2).toInt(),
+                (translatedStartPoint.x + stickLength).toInt(), (translatedStartPoint.y + translatedWidth/2).toInt())
 
             canvas.save()
             canvas.rotate(alpha, translatedStartPoint.x, translatedStartPoint.y)

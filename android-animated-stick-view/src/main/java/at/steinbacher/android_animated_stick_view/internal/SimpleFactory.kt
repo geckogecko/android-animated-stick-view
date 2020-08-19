@@ -41,6 +41,7 @@ class SimpleFactory(val context: Context,
     private fun createLine(lineDrawable: LineDrawable) =  Line(
         translatePoint(lineDrawable.translatedStartPoint),
         translatePoint(lineDrawable.translatedEndPoint),
+        lineDrawable.sourceLine.width,
         lineDrawable.sourceLine.paint,
         lineDrawable.tag
     )

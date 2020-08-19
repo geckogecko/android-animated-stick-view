@@ -35,6 +35,7 @@ class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
                             start.sourceLine,
                             interpolatedStartPoint,
                             interpolatedEndPoint,
+                            start.width,
                             start.horizontalLinesCount,
                             start.verticalLinesCount,
                             start.width,
