@@ -3,8 +3,10 @@ package at.steinbacher.android_animated_stick_view.internal
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.PointF
+import android.graphics.drawable.VectorDrawable
 import android.util.Log
 import at.steinbacher.android_animated_stick_view.Line
+import at.steinbacher.android_animated_stick_view.R
 import at.steinbacher.android_animated_stick_view.util.MathUtil
 import kotlin.math.*
 
@@ -47,8 +49,15 @@ class LineDrawable(context : Context,
         translatedEndPoint = PointF(newX, newY)
     }
 
+    override fun scaleHeight(moveY: Float) {
+        translatedEndPoint.y -= moveY
+    }
+
+    override fun scaleWidth(moveX: Float) {
+        translatedWidth -= moveX
+    }
+
     override fun draw(canvas: Canvas) {
-        Log.i(TAG, "draw: $translatedWidth")
         val vectorDrawable = sourceLine.getVectorDrawable()
         if(vectorDrawable != null) {
             val width = abs(translatedStartPoint.x - translatedEndPoint.x)

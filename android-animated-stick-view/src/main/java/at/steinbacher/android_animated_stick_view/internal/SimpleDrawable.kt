@@ -27,6 +27,8 @@ abstract class SimpleDrawable(val context: Context,
     abstract fun distanceTo(x: Float, y: Float): Float
     abstract fun move(moveX: Float, moveY: Float)
     abstract fun rotate(angle: Float)
+    abstract fun scaleHeight(moveY: Float)
+    abstract fun scaleWidth(moveX: Float)
 
     override fun setAlpha(alpha: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

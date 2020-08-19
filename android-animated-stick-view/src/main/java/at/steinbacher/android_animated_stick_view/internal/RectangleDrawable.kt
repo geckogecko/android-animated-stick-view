@@ -37,6 +37,14 @@ class RectangleDrawable(context : Context,
         //TODO
     }
 
+    override fun scaleHeight(moveY: Float) {
+        translatedRightBottom.y -= moveY
+    }
+
+    override fun scaleWidth(moveX: Float) {
+        translatedRightBottom.x -= moveX
+    }
+
     override fun draw(canvas: Canvas) {
         val vectorDrawable = sourceRectangle.getVectorDrawable()
         if(vectorDrawable != null) {

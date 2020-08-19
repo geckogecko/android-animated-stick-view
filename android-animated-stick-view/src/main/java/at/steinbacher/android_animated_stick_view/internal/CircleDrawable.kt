@@ -25,6 +25,13 @@ class CircleDrawable(context : Context,
     }
 
     override fun rotate(angle: Float) {}
+    override fun scaleHeight(moveY: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override fun scaleWidth(moveX: Float) {
+        TODO("Not yet implemented")
+    }
 
 
     override fun draw(canvas: Canvas) {

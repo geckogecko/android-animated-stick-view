@@ -51,7 +51,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
     private var dynamicVerticalLinesCount = false
 
     private enum class EditMode {
-        NONE, MOVE, ROTATE
+        NONE, MOVE, ROTATE, SCALE_HEIGHT, SCALE_WIDTH
     }
     private var currentEditMode = EditMode.NONE
     private var currentlyDraggedDrawable: SimpleDrawable? = null
@@ -259,6 +259,14 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
         button_edit_move.setOnClickListener {
             currentEditMode = EditMode.MOVE
         }
+
+        button_edit_scale_height.setOnClickListener {
+            currentEditMode = EditMode.SCALE_HEIGHT
+        }
+
+        button_edit_scale_width.setOnClickListener {
+            currentEditMode = EditMode.SCALE_WIDTH
+        }
     }
 
     private fun applyAttributes(attrs: AttributeSet?) {
@@ -420,6 +428,9 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
                         when(currentEditMode) {
                             EditMode.MOVE -> sceneDrawable.moveDrawable(it, lastMotionX!!-event.x, lastMotionY!!-event.y)
                             EditMode.ROTATE -> sceneDrawable.rotateDrawable(it, lastMotionY!!-event.y)
+                            EditMode.SCALE_HEIGHT -> sceneDrawable.scaleDrawableHeight(it, lastMotionY!!-event.y)
+                            EditMode.SCALE_WIDTH -> sceneDrawable.scaleDrawableWidth(it, lastMotionX!!-event.x)
+
                             else -> Log.i(TAG, "Currently no edit mode set")
                         }
                         invalidate()

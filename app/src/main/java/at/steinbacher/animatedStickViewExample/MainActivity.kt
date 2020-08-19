@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_upper_foot,
                 R.drawable.ic_lower_foot).sceneCollection)
             it.setAnimationDuration(700)
-            it.startAnimation()
+            //it.startAnimation()
         }
     }
 }

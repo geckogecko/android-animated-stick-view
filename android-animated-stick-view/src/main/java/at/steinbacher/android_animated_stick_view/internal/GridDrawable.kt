@@ -25,6 +25,8 @@ class GridDrawable(context: Context,
     //we dont want to allow moving the grid
     override fun move(x: Float, y: Float) {}
     override fun rotate(angle: Float) {}
+    override fun scaleHeight(moveY: Float) {}
+    override fun scaleWidth(moveX: Float) {}
 
     override fun draw(canvas: Canvas) {
         for (i in 0..horizontalLinesCount) {

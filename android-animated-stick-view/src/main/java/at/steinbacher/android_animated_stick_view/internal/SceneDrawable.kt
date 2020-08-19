@@ -51,6 +51,12 @@ class SceneDrawable(context: Context,
     override fun rotate(angle: Float) {
     }
 
+    override fun scaleHeight(moveY: Float) {
+    }
+
+    override fun scaleWidth(moveX: Float) {
+    }
+
     override fun draw(canvas : Canvas) {
         for(simpleDrawables in simpleDrawables) {
             simpleDrawables.draw(canvas)
@@ -129,5 +135,13 @@ class SceneDrawable(context: Context,
 
     fun rotateDrawable(simpleDrawable: SimpleDrawable, angle: Float) {
         simpleDrawable.rotate(Math.toRadians(angle.toDouble()).toFloat())
+    }
+
+    fun scaleDrawableHeight(simpleDrawable: SimpleDrawable, moveY: Float) {
+        simpleDrawable.scaleHeight(moveY)
+    }
+
+    fun scaleDrawableWidth(simpleDrawable: SimpleDrawable, moveX: Float) {
+        simpleDrawable.scaleWidth(moveX)
     }
 }
