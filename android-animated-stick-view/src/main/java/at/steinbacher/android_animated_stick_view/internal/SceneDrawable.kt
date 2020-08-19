@@ -128,7 +128,6 @@ class SceneDrawable(context: Context,
     }
 
     fun rotateDrawable(simpleDrawable: SimpleDrawable, angle: Float) {
-        Log.i(TAG, angle.toString())
         simpleDrawable.rotate(Math.toRadians(angle.toDouble()).toFloat())
     }
 }

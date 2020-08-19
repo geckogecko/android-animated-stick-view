@@ -53,8 +53,6 @@ class LineDrawable(context : Context,
             val stickLength = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0))
             val alpha = getRotationDegrees(width, height, stickLength)
 
-            Log.i(TAG, "draw: $alpha")
-
             vectorDrawable.setBounds(translatedStartPoint.x.toInt(), (translatedStartPoint.y - 30).toInt(),
                 (translatedStartPoint.x + stickLength).toInt(), (translatedStartPoint.y + 30).toInt())
 

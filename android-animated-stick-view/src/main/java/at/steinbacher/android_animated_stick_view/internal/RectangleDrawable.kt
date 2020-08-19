@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.PointF
 import at.steinbacher.android_animated_stick_view.Line
 import at.steinbacher.android_animated_stick_view.Rectangle
+import at.steinbacher.android_animated_stick_view.util.MathUtil
 
 class RectangleDrawable(context : Context,
                         val sourceRectangle: Rectangle,
@@ -15,14 +16,25 @@ class RectangleDrawable(context : Context,
 ): SimpleDrawable(context, horizontalLinesCount, verticalLinesCount, width, height, tag) {
 
     override fun distanceTo(x: Float, y: Float): Float {
-        return Float.MAX_VALUE
+        //is inside?
+        return if(x >= translatedLeftTop.x &&  x <= translatedRightBottom.x
+            && y >= translatedLeftTop.y && y <= translatedRightBottom.y) {
+            0f
+        } else {
+            Float.MAX_VALUE
+        }
     }
 
-    override fun move(x: Float, y: Float) {
-        TODO("Not yet implemented")
+    override fun move(moveX: Float, moveY: Float) {
+        translatedLeftTop.x -= moveX
+        translatedLeftTop.y -= moveY
+
+        translatedRightBottom.x -= moveX
+        translatedRightBottom.y -= moveY
     }
 
     override fun rotate(angle: Float) {
+        //TODO
     }
 
     override fun draw(canvas: Canvas) {
@@ -37,6 +49,15 @@ class RectangleDrawable(context : Context,
                 translatedRightBottom.x, translatedRightBottom.y,
                 sourceRectangle.paint
             )
+        }
+
+        if(highlighted) {
+            val distance = 10
+            val left = translatedLeftTop.x  - distance
+            val top = translatedLeftTop.y - distance
+            val right = translatedRightBottom.x + distance
+            val bottom = translatedRightBottom.y + distance
+            canvas.drawRect(left, top, right, bottom, highlightPaint)
         }
     }
 }
