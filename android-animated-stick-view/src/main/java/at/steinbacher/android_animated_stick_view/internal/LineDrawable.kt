@@ -6,11 +6,9 @@ import android.graphics.PointF
 import android.util.Log
 import at.steinbacher.android_animated_stick_view.Line
 import at.steinbacher.android_animated_stick_view.util.MathUtil
-import kotlin.math.abs
-import kotlin.math.asin
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
+private const val TAG = "LineDrawable"
 class LineDrawable(context : Context,
                    val sourceLine : Line,
                    var translatedStartPoint : PointF,
@@ -30,7 +28,6 @@ class LineDrawable(context : Context,
             return Float.MAX_VALUE
         }
 
-        Log.i("TAGTEST", "$tag $distanceToStart $distanceToEnd")
         return distanceToLine
     }
 
@@ -42,6 +39,12 @@ class LineDrawable(context : Context,
         translatedEndPoint.y -= moveY
     }
 
+    override fun rotate(angle: Float) {
+        val newX = translatedStartPoint.x + ((translatedEndPoint.x-translatedStartPoint.x) * cos(angle)) - ((translatedEndPoint.y-translatedStartPoint.y) * sin(angle))
+        val newY = translatedStartPoint.y + ((translatedEndPoint.x-translatedStartPoint.x) * sin(angle)) + ((translatedEndPoint.y-translatedStartPoint.y) * cos(angle))
+        translatedEndPoint = PointF(newX, newY)
+    }
+
     override fun draw(canvas: Canvas) {
         val vectorDrawable = sourceLine.getVectorDrawable()
         if(vectorDrawable != null) {
@@ -50,8 +53,10 @@ class LineDrawable(context : Context,
             val stickLength = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0))
             val alpha = getRotationDegrees(width, height, stickLength)
 
-            vectorDrawable.setBounds(translatedStartPoint.x.toInt(), (translatedStartPoint.y - 50).toInt(),
-                (translatedStartPoint.x + stickLength).toInt(), (translatedStartPoint.y + 50).toInt())
+            Log.i(TAG, "draw: $alpha")
+
+            vectorDrawable.setBounds(translatedStartPoint.x.toInt(), (translatedStartPoint.y - 30).toInt(),
+                (translatedStartPoint.x + stickLength).toInt(), (translatedStartPoint.y + 30).toInt())
 
             canvas.save()
             canvas.rotate(alpha, translatedStartPoint.x, translatedStartPoint.y)

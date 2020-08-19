@@ -41,36 +41,43 @@ class MainActivity : AppCompatActivity() {
 
         val scene = Scene().also {
             it.simples.add(Grid(gridPaint, "grid"))
-            it.simples.add(Circle(PointF(4F,3.5F), 0.5F, paint,"head"))
-            it.simples.add(Line(PointF(4F,4F), PointF(4F,4.5F), paint,"neck"))
+
+            it.simples.add(Rectangle(PointF(3.7F,3.7F), PointF(4.3F,5F), paint,"neck").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_neck, this)
+            })
+
+            it.simples.add(Rectangle(PointF(3.2F,2.5F), PointF(4.8F,4.3F), paint,"head").also {
+                    circle ->  circle.setVectorDrawable(R.drawable.ic_head, this)
+            })
+
+            it.simples.add(Line(PointF(4.9F,4.8F), PointF(5.6F,7F), paint,"right_upper_arm").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_upper_arm, this)
+            })
+            it.simples.add(Line(PointF(5.6F,6.7F), PointF(5.6F,8.9F), paint,"right_lower_arm").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_lower_arm, this)
+            })
+            it.simples.add(Line(PointF(3.1F,4.8F), PointF(2.5F,7F), paint,"left_upper_arm").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_upper_arm, this)
+            })
+            it.simples.add(Line(PointF(2.52F,6.7F), PointF(2.5F,8.9F), paint,"left_lower_arm").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_lower_arm, this)
+            })
+
+            it.simples.add(Line(PointF(4.5F,7.5F), PointF(5.5F,10.5F), paint,"right_upper_foot").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_upper_foot, this)
+            })
+            it.simples.add(Line(PointF(5.4F,10F), PointF(5.5F,12F), paint,"right_lower_foot").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_lower_foot, this)
+            })
+            it.simples.add(Line(PointF(3.5F,7.5F), PointF(2.5F,10.5F), paint,"left_upper_foot").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_upper_foot, this)
+            })
+            it.simples.add(Line(PointF(2.6F,10F), PointF(2.5F,12F), paint,"left_lower_foot").also {
+                    line ->  line.setVectorDrawable(R.drawable.ic_lower_foot, this)
+            })
+
             it.simples.add(Rectangle(PointF(3F,4.5F), PointF(5F,8F), paint,"body").also {
-                rectangle ->  rectangle.setVectorDrawable(R.drawable.ic_torso, this)
-            })
-
-            it.simples.add(Line(PointF(4.5F,5F), PointF(5F,6F), paint,"right_lower_arm").also {
-                line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(5F,6F), PointF(5F,7F), paint,"right_upper_arm").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(3.5F,5F), PointF(3F,6F), paint,"left_lower_arm").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(3F,6F), PointF(3F,7F), paint,"left_upper_arm").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-
-            it.simples.add(Line(PointF(4.5F,7.5F), PointF(5.5F,9F), paint,"right_upper_foot").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(5.5F,9F), PointF(5.5F,10.5F), paint,"right_lower_foot").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(3.5F,7.5F), PointF(2.5F,9F), paint,"left_upper_foot").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
-            })
-            it.simples.add(Line(PointF(2.5F,9F), PointF(2.5F,10.5F), paint,"left_lower_foot").also {
-                    line ->  line.setVectorDrawable(R.drawable.ic_trending_flat_24px, this)
+                    rectangle ->  rectangle.setVectorDrawable(R.drawable.ic_torso, this)
             })
         }
 

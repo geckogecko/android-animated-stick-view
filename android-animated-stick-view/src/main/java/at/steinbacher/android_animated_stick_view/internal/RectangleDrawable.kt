@@ -22,6 +22,9 @@ class RectangleDrawable(context : Context,
         TODO("Not yet implemented")
     }
 
+    override fun rotate(angle: Float) {
+    }
+
     override fun draw(canvas: Canvas) {
         val vectorDrawable = sourceRectangle.getVectorDrawable()
         if(vectorDrawable != null) {

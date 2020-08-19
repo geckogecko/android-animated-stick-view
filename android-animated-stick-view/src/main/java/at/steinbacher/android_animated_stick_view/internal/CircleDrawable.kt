@@ -24,6 +24,8 @@ class CircleDrawable(context : Context,
         translatedMiddlePointF = PointF(translatedMiddlePointF.x-moveX, translatedMiddlePointF.y-moveY)
     }
 
+    override fun rotate(angle: Float) {}
+
 
     override fun draw(canvas: Canvas) {
         canvas.drawCircle(translatedMiddlePointF.x, translatedMiddlePointF.y, translatedRadius, sourceCircle.paint)

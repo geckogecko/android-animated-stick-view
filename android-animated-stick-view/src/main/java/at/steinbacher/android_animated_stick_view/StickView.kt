@@ -13,7 +13,10 @@ import android.view.animation.Interpolator
 import android.widget.LinearLayout
 import at.steinbacher.android_animated_stick_view.internal.*
 import kotlinx.android.synthetic.main.layout_stick_view.view.*
+import kotlin.math.abs
 import kotlin.math.floor
+
+private const val TAG = "StickView"
 
 class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener, View.OnTouchListener {
     constructor(context: Context) : this(context, null) {
@@ -47,6 +50,10 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
     private var dynamicHorizontalLinesCount = false
     private var dynamicVerticalLinesCount = false
 
+    private enum class EditMode {
+        NONE, MOVE, ROTATE
+    }
+    private var currentEditMode = EditMode.NONE
     private var currentlyDraggedDrawable: SimpleDrawable? = null
 
     private var lastMotionX: Float? = null
@@ -241,8 +248,16 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
                 currentlyDraggedDrawable = null
                 invalidate()
 
-                nav_edit.visibility = View.GONE
+                hideEditNavBar()
             }
+        }
+
+        button_edit_rotate.setOnClickListener {
+            currentEditMode = EditMode.ROTATE
+        }
+
+        button_edit_move.setOnClickListener {
+            currentEditMode = EditMode.MOVE
         }
     }
 
@@ -393,7 +408,8 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
                     if(currentlyDraggedDrawable == null) {
                         currentlyDraggedDrawable = sceneDrawable.getClickedDrawable(event.x, event.y)
                         currentlyDraggedDrawable?.let {
-                            nav_edit.visibility = View.VISIBLE
+                            showEditNavBar()
+
                             sceneDrawable.highlightDrawable(it, true)
                             invalidate()
                         }
@@ -401,7 +417,11 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
                 }
                 MotionEvent.ACTION_MOVE -> currentlyDraggedDrawable?.let {
                     if(lastMotionX != null && lastMotionY != null) {
-                        sceneDrawable.moveDrawable(it, lastMotionX!!-event.x, lastMotionY!!-event.y)
+                        when(currentEditMode) {
+                            EditMode.MOVE -> sceneDrawable.moveDrawable(it, lastMotionX!!-event.x, lastMotionY!!-event.y)
+                            EditMode.ROTATE -> sceneDrawable.rotateDrawable(it, lastMotionY!!-event.y)
+                            else -> Log.i(TAG, "Currently no edit mode set")
+                        }
                         invalidate()
                     }
 
@@ -416,5 +436,15 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
             }
         }
         return true
+    }
+
+    private fun showEditNavBar() {
+        nav_edit.visibility = View.VISIBLE
+        currentEditMode = EditMode.MOVE
+    }
+
+    private fun hideEditNavBar() {
+        nav_edit.visibility = View.GONE
+        currentEditMode = EditMode.NONE
     }
 }

@@ -26,6 +26,14 @@
             app:layout_constraintEnd_toStartOf="@id/button_edit_save"
             app:layout_constraintTop_toTopOf="parent"
             android:text="rotate"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_edit_move"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/button_edit_rotate"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="move"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

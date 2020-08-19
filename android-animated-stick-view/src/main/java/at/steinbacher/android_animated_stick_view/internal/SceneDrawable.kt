@@ -45,7 +45,10 @@ class SceneDrawable(context: Context,
         return Float.MAX_VALUE
     }
 
-    override fun move(x: Float, y: Float) {
+    override fun move(moveX: Float, moveY: Float) {
+    }
+
+    override fun rotate(angle: Float) {
     }
 
     override fun draw(canvas : Canvas) {
@@ -122,5 +125,10 @@ class SceneDrawable(context: Context,
 
     fun moveDrawable(simpleDrawable: SimpleDrawable, moveX: Float, moveY: Float) {
         simpleDrawable.move(moveX, moveY)
+    }
+
+    fun rotateDrawable(simpleDrawable: SimpleDrawable, angle: Float) {
+        Log.i(TAG, angle.toString())
+        simpleDrawable.rotate(Math.toRadians(angle.toDouble()).toFloat())
     }
 }
