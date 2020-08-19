@@ -2,6 +2,7 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.content.Context
 import android.graphics.PointF
+import android.util.Log
 import at.steinbacher.android_animated_stick_view.*
 
 class SimpleDrawableFactory(val context: Context,

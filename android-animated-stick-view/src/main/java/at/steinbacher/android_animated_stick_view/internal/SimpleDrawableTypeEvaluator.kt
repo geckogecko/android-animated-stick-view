@@ -2,6 +2,7 @@ package at.steinbacher.android_animated_stick_view.internal
 
 import android.animation.TypeEvaluator
 import android.graphics.PointF
+import android.util.Log
 
 class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
     override fun evaluate(
@@ -29,13 +30,14 @@ class SimpleDrawableTypeEvaluator : TypeEvaluator<Array<SimpleDrawable>> {
                         start.translatedEndPoint.y + fraction
                                 * (end.translatedEndPoint.y - start.translatedEndPoint.y))
 
+                    Log.i("GEORG", "evaluate: ${start.width}")
                     array.add(
                         LineDrawable(
                             start.context,
                             start.sourceLine,
                             interpolatedStartPoint,
                             interpolatedEndPoint,
-                            start.width,
+                            start.translatedWidth,
                             start.horizontalLinesCount,
                             start.verticalLinesCount,
                             start.width,

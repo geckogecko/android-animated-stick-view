@@ -48,6 +48,7 @@ class LineDrawable(context : Context,
     }
 
     override fun draw(canvas: Canvas) {
+        Log.i(TAG, "draw: $translatedWidth")
         val vectorDrawable = sourceLine.getVectorDrawable()
         if(vectorDrawable != null) {
             val width = abs(translatedStartPoint.x - translatedEndPoint.x)
