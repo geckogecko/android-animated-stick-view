@@ -43,9 +43,10 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_upper_arm,
                 R.drawable.ic_lower_arm,
                 R.drawable.ic_upper_foot,
-                R.drawable.ic_lower_foot).sceneCollection)
+                R.drawable.ic_lower_foot,
+                R.drawable.ic_shoe_front).sceneCollection)
             it.setAnimationDuration(700)
-            //it.startAnimation()
+            it.startAnimation()
         }
     }
 }
