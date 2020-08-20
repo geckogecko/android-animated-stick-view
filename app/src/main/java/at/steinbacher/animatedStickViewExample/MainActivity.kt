@@ -1,16 +1,11 @@
 package at.steinbacher.animatedStickViewExample
 
-import android.graphics.Paint
-import android.graphics.PointF
-import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import at.steinbacher.android_animated_stick_view.*
-import at.steinbacher.android_animated_stick_view.util.SceneUtil
 import at.steinbacher.animatedStickViewExample.demos.HighKnees
-import java.nio.file.Files.move
 
 private const val TAG = "MainActivity"
 
@@ -44,7 +39,9 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_lower_arm,
                 R.drawable.ic_upper_foot,
                 R.drawable.ic_lower_foot,
-                R.drawable.ic_shoe_front).sceneCollection)
+                R.drawable.ic_shoe_front,
+                R.drawable.ic_hand_front_left,
+                R.drawable.ic_hand_front_right).sceneCollection)
             it.setAnimationDuration(700)
             it.startAnimation()
         }

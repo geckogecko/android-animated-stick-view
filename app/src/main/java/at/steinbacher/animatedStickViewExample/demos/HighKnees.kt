@@ -14,7 +14,9 @@ class HighKnees(context: Context,
                 lowerArmDrawable: Int,
                 upperFootDrawable: Int,
                 lowerFootDrawable: Int,
-                shoeDrawable: Int
+                shoeDrawable: Int,
+                handLeftDrawable: Int,
+                handRightDrawable: Int
 ) {
     val paint = Paint().apply {
         color = context.getColor(R.color.black)
@@ -44,11 +46,18 @@ class HighKnees(context: Context,
         it.simples.add(Line(PointF(5.4F,6.7F), PointF(4.4F,5.4F), 0.4f, paint,"right_lower_arm").also {
                 line ->  line.setVectorDrawable(lowerArmDrawable, context)
         })
+        it.simples.add(Line(PointF(4.6F,5.6F), PointF(4.2F,5.0F), 0.4f, paint, "right_hand").also {
+                rectangle -> rectangle.setVectorDrawable(handRightDrawable, context)
+        })
+
         it.simples.add(Line(PointF(3.1F,4.8F), PointF(2.5F,7F), 0.6f, paint,"left_upper_arm").also {
                 line ->  line.setVectorDrawable(upperArmDrawable, context)
         })
         it.simples.add(Line(PointF(2.52F,6.7F), PointF(3.5F,5.4F), 0.4f, paint,"left_lower_arm").also {
                 line ->  line.setVectorDrawable(lowerArmDrawable, context)
+        })
+        it.simples.add(Line(PointF(3.3F,5.6F), PointF(3.7F,5.0F), 0.4f, paint, "left_hand").also {
+                rectangle -> rectangle.setVectorDrawable(handLeftDrawable, context)
         })
 
 
@@ -77,6 +86,7 @@ class HighKnees(context: Context,
         //move up
         it.simples.add(Line(PointF(4.9F,4.8F), PointF(4.4F,6F), 0.6f, paint,"right_upper_arm"))
         it.simples.add(Line(PointF(4.4F,5.7F), PointF(4.4F,4.4F), 0.4f, paint,"right_lower_arm"))
+        it.simples.add(Line(PointF(4.4F,4.6F), PointF(4.6F,4.0F), 0.4f, paint, "right_hand"))
 
         it.simples.add(Line(PointF(3.5F,7.5F), PointF(3.4F,5F), 0.9f, paint,"left_upper_foot"))
         it.simples.add(Line(PointF(3.4F,5.0F), PointF(3.4F,8F), 0.6f, paint,"left_lower_foot"))
@@ -88,6 +98,7 @@ class HighKnees(context: Context,
         //move down
         it.simples.add(Line(PointF(4.9F,4.8F), PointF(5.4F,7F), 0.6f, paint,"right_upper_arm"))
         it.simples.add(Line(PointF(5.4F,6.7F), PointF(4.4F,5.4F), 0.4f, paint,"right_lower_arm"))
+        it.simples.add(Line(PointF(4.6F,5.6F), PointF(4.2F,5.0F), 0.4f, paint, "right_hand"))
 
         it.simples.add(Line(PointF(3.5F,7.5F), PointF(3.4F,10F), 0.9f, paint,"left_upper_foot"))
         it.simples.add(Line(PointF(3.4F,9.5F), PointF(3.4F,12F), 0.6f, paint,"left_lower_foot"))
@@ -99,6 +110,7 @@ class HighKnees(context: Context,
         //move up
         it.simples.add(Line(PointF(3.1F,4.8F), PointF(3.5F,6F), 0.6f, paint,"left_upper_arm"))
         it.simples.add(Line(PointF(3.5F,5.7F), PointF(3.5F,4.4F), 0.4f, paint,"left_lower_arm"))
+        it.simples.add(Line(PointF(3.5F,4.6F), PointF(3.5F,4.0F), 0.4f, paint, "left_hand"))
 
         it.simples.add(Line(PointF(4.5F,7.5F), PointF(4.6F,5F), 0.9f, paint,"right_upper_foot"))
         it.simples.add(Line(PointF(4.6F,5.0F), PointF(4.6F,8F), 0.6f, paint,"right_lower_foot"))
@@ -110,6 +122,7 @@ class HighKnees(context: Context,
         //move down
         it.simples.add(Line(PointF(3.1F,4.8F), PointF(2.5F,7F), 0.6f, paint,"left_upper_arm"))
         it.simples.add(Line(PointF(2.52F,6.7F), PointF(3.5F,5.4F), 0.4f, paint,"left_lower_arm"))
+        it.simples.add(Line(PointF(3.3F,5.6F), PointF(3.7F,5.0F), 0.4f, paint, "left_hand"))
 
         it.simples.add(Line(PointF(4.5F,7.5F), PointF(4.6F,10F), 0.9f, paint,"right_upper_foot"))
         it.simples.add(Line(PointF(4.6F,9.5F), PointF(4.6F,12F), 0.6f, paint,"right_lower_foot"))
