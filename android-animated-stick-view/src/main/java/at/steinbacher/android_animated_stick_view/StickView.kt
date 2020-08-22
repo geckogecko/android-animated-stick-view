@@ -46,6 +46,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
 
     private var initDone = false
     private var startAnimation = false
+    private var animationRunning = false
     private var stopAnimation = false
     private var animationRepeatMode = false
     private var dynamicHorizontalLinesCount = false
@@ -112,7 +113,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
      * @see #setScenes(scenes : List<Scene>)
      */
     fun startAnimation() {
-        if(startAnimation) { return }
+        if(startAnimation || animationRunning) { return }
 
         startAnimation = true
         stopAnimation = false
@@ -124,7 +125,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
      * @see #setScenes(scenes : List<Scene>)
      */
     fun stopAnimation() {
-        if(stopAnimation) { return }
+        if(stopAnimation || !animationRunning) { return }
 
         stopAnimation = true
 
@@ -343,6 +344,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
     }
 
     private fun runAnimation() {
+        animationRunning = true
         val nextSceneDrawable = SceneDrawable(context,
             sceneDrawable.horizontalLinesCount, sceneDrawable.verticalLinesCount,
             sceneDrawable.width, sceneDrawable.height, "next_scene_drawable").also { it ->
@@ -389,6 +391,8 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
             valueAnimator.addListener(this)
             valueAnimator.addUpdateListener(this)
             valueAnimator.start()
+        } else if(stopAnimation) {
+            animationRunning = false
         }
     }
 
