@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import at.steinbacher.android_animated_stick_view.*
 import at.steinbacher.animatedStickViewExample.demos.HighKnees
+import kotlinx.android.synthetic.main.activity_main.*
 
 private const val TAG = "MainActivity"
 
@@ -17,10 +18,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        stickView = findViewById(R.id.stick_view)
+        start_animation.setOnClickListener {
+            stick_view.startAnimation()
+        }
 
-        findViewById<AppCompatButton>(R.id.save).setOnClickListener {
-            Log.i(TAG, stickView?.getCurrentScene()?.toJson().toString())
+        stop_animation.setOnClickListener {
+            stick_view.stopAnimation()
         }
 
         /*
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         [{"item_type":"Grid","item":{"paint":{"color":"#FFC3C3C3"},"tag":"grid"}},{"item_type":"Rectangle","item":{"topLeft":{"x":3.7,"y":3.7},"bottomRight":{"x":4.3,"y":5},"paint":{"color":"#FF000000"},"drawable":2131099748,"tag":"neck"}},{"item_type":"Rectangle","item":{"topLeft":{"x":3.2,"y":2.5},"bottomRight":{"x":4.8,"y":4.3},"paint":{"color":"#FF000000"},"drawable":2131099743,"tag":"head"}},{"item_type":"Line","item":{"startPoint":{"x":4.9,"y":4.8},"endPoint":{"x":5.592743,"y":7.002093},"width":0.6,"paint":{"color":"#FF000000"},"tag":"right_upper_arm"}},{"item_type":"Line","item":{"startPoint":{"x":5.6,"y":6.7},"endPoint":{"x":5.6,"y":8.9},"width":0.4,"paint":{"color":"#FF000000"},"tag":"right_lower_arm"}},{"item_type":"Line","item":{"startPoint":{"x":3.1,"y":4.8},"endPoint":{"x":2.5,"y":7},"width":0.6,"paint":{"color":"#FF000000"},"tag":"left_upper_arm"}},{"item_type":"Line","item":{"startPoint":{"x":2.52,"y":6.7},"endPoint":{"x":2.5,"y":8.9},"width":0.4,"paint":{"color":"#FF000000"},"tag":"left_lower_arm"}},{"item_type":"Line","item":{"startPoint":{"x":4.5185184,"y":7.459803},"endPoint":{"x":5.5185184,"y":10.459802},"width":0.9,"paint":{"color":"#FF000000"},"tag":"right_upper_foot"}},{"item_type":"Line","item":{"startPoint":{"x":5.4,"y":10},"endPoint":{"x":5.5,"y":12},"width":0.6,"paint":{"color":"#FF000000"},"tag":"right_lower_foot"}},{"item_type":"Line","item":{"startPoint":{"x":3.5,"y":7.5},"endPoint":{"x":2.5,"y":10.5},"width":0.9,"paint":{"color":"#FF000000"},"tag":"left_upper_foot"}},{"item_type":"Line","item":{"startPoint":{"x":2.6,"y":10},"endPoint":{"x":2.5,"y":12},"width":0.6,"paint":{"color":"#FF000000"},"tag":"left_lower_foot"}},{"item_type":"Rectangle","item":{"topLeft":{"x":3,"y":4.5},"bottomRight":{"x":5,"y":8},"paint":{"color":"#FF000000"},"drawable":2131099749,"tag":"body"}}]
          */
 
-        stickView?.let {
+        stick_view?.let {
             it.setVerticalLinesCount(10)
             it.enableDynamicHorizontalLinesCount(true)
             it.setSceneCollection(HighKnees(this,

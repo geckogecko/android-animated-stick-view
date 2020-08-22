@@ -15,10 +15,19 @@
         app:animationRepeat="true"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/save"
+        android:id="@+id/start_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Start"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stop_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        app:layout_constraintStart_toEndOf="@id/start_animation"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

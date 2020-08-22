@@ -46,6 +46,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
 
     private var initDone = false
     private var startAnimation = false
+    private var stopAnimation = false
     private var animationRepeatMode = false
     private var dynamicHorizontalLinesCount = false
     private var dynamicVerticalLinesCount = false
@@ -58,6 +59,8 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
 
     private var lastMotionX: Float? = null
     private var lastMotionY: Float? = null
+
+    private var valueAnimator: ValueAnimator? = null
 
     override fun onDraw(canvas: Canvas?) {
         if(canvas == null) return
@@ -109,7 +112,25 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
      * @see #setScenes(scenes : List<Scene>)
      */
     fun startAnimation() {
+        if(startAnimation) { return }
+
         startAnimation = true
+        stopAnimation = false
+        invalidate()
+    }
+
+    /**
+     * Stop looping through the provided scenes
+     * @see #setScenes(scenes : List<Scene>)
+     */
+    fun stopAnimation() {
+        if(stopAnimation) { return }
+
+        stopAnimation = true
+
+        valueAnimator?.removeAllListeners()
+        valueAnimator = null
+
         invalidate()
     }
 
@@ -330,10 +351,11 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
                 }
         }
 
-        val valueAnimator = createValueAnimator(sceneDrawable, nextSceneDrawable)
-        valueAnimator.addListener(this)
-        valueAnimator.addUpdateListener(this)
-        valueAnimator.start()
+        valueAnimator = createValueAnimator(sceneDrawable, nextSceneDrawable)
+        valueAnimator?.addListener(this)
+        valueAnimator?.addUpdateListener(this)
+        valueAnimator?.start()
+
     }
 
     override fun onAnimationRepeat(animation: Animator?) {
@@ -341,7 +363,7 @@ class StickView : LinearLayout, ValueAnimator.AnimatorUpdateListener, Animator.A
     }
 
     override fun onAnimationEnd(animation: Animator?) {
-        if(animationRepeatMode) {
+        if(animationRepeatMode && !stopAnimation) {
             currentSceneIndex++
             if (currentSceneIndex >= receivedScenes.size - 1) {
                 sceneDrawable.clearSimpleDrawables()
